@@ -1,10 +1,718 @@
 {
- "fonte": {},
- "meses": {},
+ "fonte": {
+  "arquivo": "liquidos.1.zip",
+  "sha256": "b50640660a661c39e3ee3b471b5c6437829e291ce9f2fad602dfcfccbfee8b0d",
+  "bytes": 21745562,
+  "etag": null,
+  "last_modified": null
+ },
+ "atualizado_em": "2026-10-05T11:13:56-03:00",
+ "ultimo_periodo": "2026-08",
+ "linhas_fonte": 1045418,
+ "linhas_invalidas": 0,
+ "estornos": 453,
+ "meses": {
+  "2017-01": {
+   "hash": "9a46870d52ccb88cacaba4607ba1699dddb9923f7a6be152e3a004be77e83167",
+   "linhas": 7593,
+   "volume_m3": 8809116.053,
+   "agentes": 136
+  },
+  "2017-02": {
+   "hash": "14d5249574635b17ef05c1406668b3c2924a8199ec6d881dbef3fc0d29341f70",
+   "linhas": 7500,
+   "volume_m3": 8646772.578,
+   "agentes": 138
+  },
+  "2017-03": {
+   "hash": "4a8cb5384aacc15fcd60db93079b66ced1f544f16b3a0e90740f44d1b3ffe2d9",
+   "linhas": 7814,
+   "volume_m3": 10098055.746,
+   "agentes": 143
+  },
+  "2017-04": {
+   "hash": "0bb5944135859fd42ec19ff1107e2bfce9bf12f5a16c27271645f6814853ab30",
+   "linhas": 7578,
+   "volume_m3": 9022642.516,
+   "agentes": 134
+  },
+  "2017-05": {
+   "hash": "c07637b3dbaabab2a63e072d2082669cce3b4ce0062f094abda3eec88d01e4cd",
+   "linhas": 7572,
+   "volume_m3": 9664646.102,
+   "agentes": 137
+  },
+  "2017-06": {
+   "hash": "8de08ea76d5eca9838617469133db76779c9a5d98b600a14171cab700a273d7f",
+   "linhas": 7714,
+   "volume_m3": 9698516.481,
+   "agentes": 135
+  },
+  "2017-07": {
+   "hash": "eae41f9751290e0be3dec2d78ed0d81baf1c9735e819923d8083a219b34c378f",
+   "linhas": 7729,
+   "volume_m3": 9833866.12,
+   "agentes": 134
+  },
+  "2017-08": {
+   "hash": "abec8ff050ace8ea751f10d69a135d8e0804ab4d528717b5f80d0a6277baa21a",
+   "linhas": 7813,
+   "volume_m3": 10312408.988,
+   "agentes": 135
+  },
+  "2017-09": {
+   "hash": "8f74fe813cd2adadebdd5cd988809c4644f592a30fd37a6ce62b7dd42ff51e9d",
+   "linhas": 7813,
+   "volume_m3": 10056062.772,
+   "agentes": 135
+  },
+  "2017-10": {
+   "hash": "fb64fdebdf9ee9d88d4de9c1409e6fcaec237c27749febe9810564749383a336",
+   "linhas": 7790,
+   "volume_m3": 10262077.066,
+   "agentes": 139
+  },
+  "2017-11": {
+   "hash": "ae7472ce70e7d54609c2742ce3b80f6f528355e2e2cbff5e0499a056c2a3ca23",
+   "linhas": 7793,
+   "volume_m3": 9752632.001,
+   "agentes": 132
+  },
+  "2017-12": {
+   "hash": "5730843970ca0d7052b865898ce1f3eb4bcce264081cf1f397bb06e1f99395e4",
+   "linhas": 7722,
+   "volume_m3": 9796822.677,
+   "agentes": 131
+  },
+  "2018-01": {
+   "hash": "b467669dff78eb7afec716d3be165b05dd82032a9e7854c388d18b038dc6268c",
+   "linhas": 7596,
+   "volume_m3": 9113754.233,
+   "agentes": 133
+  },
+  "2018-02": {
+   "hash": "dfaf2df555d0ede34346f39fee496dba026767e8fbb03e5d36008819828ffe6d",
+   "linhas": 7539,
+   "volume_m3": 8688026.386,
+   "agentes": 130
+  },
+  "2018-03": {
+   "hash": "edacf5beab119c297413fdf2e8ebcedcb47b2f9690dbe1d8a6160f71da7e98a1",
+   "linhas": 7732,
+   "volume_m3": 10046063.417,
+   "agentes": 128
+  },
+  "2018-04": {
+   "hash": "6008b9be6e1615074e7732e7c2b65efcef56e9166e7cc3e947425b3ccd7ec982",
+   "linhas": 7676,
+   "volume_m3": 9445881.371,
+   "agentes": 131
+  },
+  "2018-05": {
+   "hash": "91c00172efbb8d43b6dd0ae63048334dd98e598aaaa66bd34f998ab9e8fb1aa6",
+   "linhas": 7693,
+   "volume_m3": 8259219.694,
+   "agentes": 131
+  },
+  "2018-06": {
+   "hash": "3cf0313bf62ce4dc7573e8cd840555e0316bdde29de3300aff644da407c79a86",
+   "linhas": 7910,
+   "volume_m3": 9763047.115,
+   "agentes": 131
+  },
+  "2018-07": {
+   "hash": "96bf0e39cf8494be95ae60308ad16f0e3c6c26156be84415fd97a0e645a7bcbf",
+   "linhas": 7655,
+   "volume_m3": 9744900.801,
+   "agentes": 134
+  },
+  "2018-08": {
+   "hash": "7a845bc25ee8b9a56bfaaf2a72a21da11cd38ca44796b76100e51b8cc5af986a",
+   "linhas": 7686,
+   "volume_m3": 10550563.624,
+   "agentes": 133
+  },
+  "2018-09": {
+   "hash": "cefb89808f7279cfa8dc553210dbc1722a6a77f678e83e3930074ad24a35f1e7",
+   "linhas": 7697,
+   "volume_m3": 9750946.503,
+   "agentes": 135
+  },
+  "2018-10": {
+   "hash": "189db222f9b9c03d26d8580036bb49ba9acd493a64f052129e48bc14aa65302e",
+   "linhas": 7730,
+   "volume_m3": 10365100.348,
+   "agentes": 139
+  },
+  "2018-11": {
+   "hash": "f126b3231492df25708eceb8099ddd57c7429ce2a4cf1277d6632b3d19ef7f8f",
+   "linhas": 7801,
+   "volume_m3": 9893212.473,
+   "agentes": 139
+  },
+  "2018-12": {
+   "hash": "e15c53997ae5ecb6306e0cb51b4f2cc292c737399f469d75e37acc6215af1311",
+   "linhas": 7708,
+   "volume_m3": 10129201.096,
+   "agentes": 139
+  },
+  "2019-01": {
+   "hash": "db6eadde124a68ad7d33bccb105ddc88404e9dc2d4daf449b7edfc12bbc2093b",
+   "linhas": 7834,
+   "volume_m3": 9534273.019,
+   "agentes": 140
+  },
+  "2019-02": {
+   "hash": "05dfe38ac60b5972a9fbb6127d0ccc80b53e53ddd14af21f9bd42a970438d0b4",
+   "linhas": 7744,
+   "volume_m3": 9237669.402,
+   "agentes": 142
+  },
+  "2019-03": {
+   "hash": "60759ff1bf73c487dc801846046cc10fb9d9717f12b9ba6c86f0cb3948406b4f",
+   "linhas": 7665,
+   "volume_m3": 9588444.963,
+   "agentes": 139
+  },
+  "2019-04": {
+   "hash": "c3db7cd380d037f891e9399b9e99ac20a87cf841e7056090388aca4db47a9a46",
+   "linhas": 7671,
+   "volume_m3": 9834107.017,
+   "agentes": 138
+  },
+  "2019-05": {
+   "hash": "42cbd0fba60ff78d3b95eab7975b0902a9340a9e57eb8efdb21a80029a4886cb",
+   "linhas": 7635,
+   "volume_m3": 9964472.817,
+   "agentes": 138
+  },
+  "2019-06": {
+   "hash": "dd1589e6153653b91fc5da0f3da6d365caef9fb6156a58a99c5a06f8bbe4776b",
+   "linhas": 7663,
+   "volume_m3": 9471348.169,
+   "agentes": 132
+  },
+  "2019-07": {
+   "hash": "13555bcd86a9b52d1aae07826b6710c44b1dc13f81ead35f930beb72c521aaa7",
+   "linhas": 7674,
+   "volume_m3": 10449424.131,
+   "agentes": 131
+  },
+  "2019-08": {
+   "hash": "10b13e7702df62599932f61df55e11480f6abed88031ae4b53dc2d0ccc75328d",
+   "linhas": 7760,
+   "volume_m3": 10565147.901,
+   "agentes": 133
+  },
+  "2019-09": {
+   "hash": "573dd525a4336bef4ac5f1057535f78f2c157c8d67a1fe3042504d03d1a98180",
+   "linhas": 7751,
+   "volume_m3": 10005739.994,
+   "agentes": 133
+  },
+  "2019-10": {
+   "hash": "deeafadbd336e796b5acd7702be2994e9680f9f3b2d306295e8b658665770e5e",
+   "linhas": 7884,
+   "volume_m3": 10960408.615,
+   "agentes": 131
+  },
+  "2019-11": {
+   "hash": "ae192617e33f08af428e67bc8ad6ef12936b5f378d9066fe5d23fb245d289acb",
+   "linhas": 7824,
+   "volume_m3": 10159867.55,
+   "agentes": 137
+  },
+  "2019-12": {
+   "hash": "6655743b70d982c68d76f1573bebc669e63f409b227d9b1f7d7642fc376d2096",
+   "linhas": 7680,
+   "volume_m3": 10135889.54,
+   "agentes": 132
+  },
+  "2020-01": {
+   "hash": "5ed4d1ac44fd058a96e0c4a03f54352be411b485aa839238e315c571a3f44d93",
+   "linhas": 7760,
+   "volume_m3": 9655766.717,
+   "agentes": 135
+  },
+  "2020-02": {
+   "hash": "b7c56944ca929c14dd4cbd830ae922a07350ea912626ff65a2289bb445f577da",
+   "linhas": 7813,
+   "volume_m3": 9510909.611,
+   "agentes": 134
+  },
+  "2020-03": {
+   "hash": "684df12601852cb018e65564ed9743d07ad2db752d046a7ff7afbd6376d08a20",
+   "linhas": 7870,
+   "volume_m3": 9039445.697,
+   "agentes": 138
+  },
+  "2020-04": {
+   "hash": "73813a1e281ebdadcf2a7ba4639c0a33140f11b4304f9280a2d518bffe444d4a",
+   "linhas": 7588,
+   "volume_m3": 7654574.064,
+   "agentes": 136
+  },
+  "2020-05": {
+   "hash": "8647781c413488435db7b8257dd093fae9b5be39a7922b06084dfb7c60b361d4",
+   "linhas": 7578,
+   "volume_m3": 8291690.333,
+   "agentes": 137
+  },
+  "2020-06": {
+   "hash": "ffa67dbb68f4cd928d26fa2a1e8e4754ee59c3268e5831a213f61b41725515be",
+   "linhas": 7780,
+   "volume_m3": 8878422.657,
+   "agentes": 137
+  },
+  "2020-07": {
+   "hash": "408cf94b08ddca61864695977ecde727dbf810b56c80b1f95eba2b5bb290f668",
+   "linhas": 7790,
+   "volume_m3": 9859835.452,
+   "agentes": 136
+  },
+  "2020-08": {
+   "hash": "cb044d0f76a41ab13751b24af6ff2973ad6e99bd1381f4e7aa577bd96c36b6d3",
+   "linhas": 7791,
+   "volume_m3": 9818485.428,
+   "agentes": 135
+  },
+  "2020-09": {
+   "hash": "1b60bb13ae2c06fa53003c8e0270f1ba5f3747d85d8e7e49371d45ca861193cc",
+   "linhas": 7905,
+   "volume_m3": 10182296.217,
+   "agentes": 134
+  },
+  "2020-10": {
+   "hash": "544d2033a6a556392f161123d22c592e4ff3f6aa2e0d62d8eaf372b6e38a55a2",
+   "linhas": 7892,
+   "volume_m3": 10998774.96,
+   "agentes": 139
+  },
+  "2020-11": {
+   "hash": "9aa842c43e16214fda262b41219616a1e6f21f748268e6ff9fb837bcf760bdec",
+   "linhas": 7887,
+   "volume_m3": 10075067.725,
+   "agentes": 136
+  },
+  "2020-12": {
+   "hash": "94b32c7be37ccec4b7daceb099623901117b57b98fd1cb10338da15172ecdc37",
+   "linhas": 7860,
+   "volume_m3": 10604988.845,
+   "agentes": 135
+  },
+  "2021-01": {
+   "hash": "291d384a726a2388ec4eecc6fe52bf3922f6845412447f82df44b418cb6869ea",
+   "linhas": 7722,
+   "volume_m3": 9700516.251,
+   "agentes": 138
+  },
+  "2021-02": {
+   "hash": "b408415a77561435f0d229182f0f424f05ed25e8e20d2edb5f93c459cf50782f",
+   "linhas": 7731,
+   "volume_m3": 9050837.196,
+   "agentes": 135
+  },
+  "2021-03": {
+   "hash": "05bd8bc01f3c5bc451dc578ecd5fd11a6ab1682b5015d6c3d4476c6906508aaa",
+   "linhas": 7949,
+   "volume_m3": 10057182.249,
+   "agentes": 141
+  },
+  "2021-04": {
+   "hash": "8632909db5570b782a192383efa58fb7a6bdc573ee4211fd2b3d6360a29f073c",
+   "linhas": 7673,
+   "volume_m3": 9508303.081,
+   "agentes": 133
+  },
+  "2021-05": {
+   "hash": "4e0de0a6e70d4d425c3b7a5a1c0d02845da092e96f330a2bfbf4499f6566f6c5",
+   "linhas": 7709,
+   "volume_m3": 9776375.402,
+   "agentes": 138
+  },
+  "2021-06": {
+   "hash": "aad113c55ff7f7efb06e389da61bcef6450bc873b5290a6978cbffd749ee1098",
+   "linhas": 7734,
+   "volume_m3": 9897555.387,
+   "agentes": 139
+  },
+  "2021-07": {
+   "hash": "b8e02fcd926547e2dd7a123d0250768662287a46024618821bcf126089738417",
+   "linhas": 7685,
+   "volume_m3": 10850550.183,
+   "agentes": 139
+  },
+  "2021-08": {
+   "hash": "aeb084c71bd1ae9aa7ef937624d6b948d1f10a87163aebf0bb533be2461e88c7",
+   "linhas": 7763,
+   "volume_m3": 10849752.16,
+   "agentes": 139
+  },
+  "2021-09": {
+   "hash": "7efd2df212919c192346d46d8ada9ec5834324c868f2fac42429e18b48b84a93",
+   "linhas": 7858,
+   "volume_m3": 10591277.279,
+   "agentes": 139
+  },
+  "2021-10": {
+   "hash": "1f8c19159cfa29210c9edf29a62a346713b252c123634de276c825d9e8e06057",
+   "linhas": 7967,
+   "volume_m3": 10859597.875,
+   "agentes": 138
+  },
+  "2021-11": {
+   "hash": "18303cd2f53dd89bc5c1ed593706c2ea1c2fb04fc78d23d67760661983fb4f60",
+   "linhas": 7954,
+   "volume_m3": 9952647.705,
+   "agentes": 141
+  },
+  "2021-12": {
+   "hash": "090e8a78faa007a9c03909fb1ef8261edc9518cc893d7d8c6603520e89b4930c",
+   "linhas": 7869,
+   "volume_m3": 10480929.464,
+   "agentes": 140
+  },
+  "2022-01": {
+   "hash": "9e67c3b61aa60694716df8c16f1ec37ace43cb73c38ac188cf283145a5af03be",
+   "linhas": 7795,
+   "volume_m3": 9075327.411,
+   "agentes": 136
+  },
+  "2022-02": {
+   "hash": "f1a7bc203aba3c0850e5727a7193aee38ead561a4dc7943aaf7b5a9fadd1f9fa",
+   "linhas": 7948,
+   "volume_m3": 9558823.267,
+   "agentes": 142
+  },
+  "2022-03": {
+   "hash": "e66d0c1dd3f271daa45a75ec271b87cda54a1723fbc5c6585f91727f23a2ce9a",
+   "linhas": 8415,
+   "volume_m3": 10441872.257,
+   "agentes": 140
+  },
+  "2022-04": {
+   "hash": "26768ff5fbf744dcfa95c3bf63aa43c1b8dc466c6490690cd1d69d195fcd55f8",
+   "linhas": 8053,
+   "volume_m3": 9794354.755,
+   "agentes": 137
+  },
+  "2022-05": {
+   "hash": "fa17976fda716b5d8f69d83ef861f3c68d3c9f78dda42789048466e27dbb9e58",
+   "linhas": 8262,
+   "volume_m3": 10244946.398,
+   "agentes": 141
+  },
+  "2022-06": {
+   "hash": "4eb0c306c42d9687d92288b8d9b8a6a4fd7b9593f6cc8484074f67f02df74e7e",
+   "linhas": 8142,
+   "volume_m3": 9808068.336,
+   "agentes": 139
+  },
+  "2022-07": {
+   "hash": "0ab9f2095828c27ae52102dc21c904200c6c11e222afd9552369ffa114801c90",
+   "linhas": 8396,
+   "volume_m3": 10572484.375,
+   "agentes": 139
+  },
+  "2022-08": {
+   "hash": "088344b36e87b55e0838b312f2ec17ff6dc1306fac7963559324904d964dd3ab",
+   "linhas": 8547,
+   "volume_m3": 11103779.147,
+   "agentes": 142
+  },
+  "2022-09": {
+   "hash": "2689a3e413160bba3e5714d03d17227c40c1bc78dc12a8461691d63ad547d07c",
+   "linhas": 8631,
+   "volume_m3": 10811373.583,
+   "agentes": 144
+  },
+  "2022-10": {
+   "hash": "4d1d9a60b51f8a51409dffe614df4eff55e7e08d9357f525b7a3bc5a07c4accf",
+   "linhas": 8774,
+   "volume_m3": 10958165.0,
+   "agentes": 145
+  },
+  "2022-11": {
+   "hash": "4a1f24cbddd1db25bc82b951787f84ab395bc7081cd80a899d1859dc25727246",
+   "linhas": 8749,
+   "volume_m3": 10364787.875,
+   "agentes": 144
+  },
+  "2022-12": {
+   "hash": "74ff59ea1e8266a94d79e5ac81260d4e1138d7ce0480743c4b12dc3ae49dacb7",
+   "linhas": 8843,
+   "volume_m3": 10955794.675,
+   "agentes": 147
+  },
+  "2023-01": {
+   "hash": "b064759590e1a75cf3f5a84ca59ffa70b2484828e25b3f03633570c4bfda8002",
+   "linhas": 8563,
+   "volume_m3": 9519998.009,
+   "agentes": 150
+  },
+  "2023-02": {
+   "hash": "1283c9ad8d30bd47858fac99b18feb4f20c7efbc311bb46b8fc8fa1c93fc05b8",
+   "linhas": 8584,
+   "volume_m3": 9844152.507,
+   "agentes": 148
+  },
+  "2023-03": {
+   "hash": "802701d261e963c4ec9fed3f7addddf03e3d178866dd6b784ae4378b3ad96b9c",
+   "linhas": 8916,
+   "volume_m3": 11180318.859,
+   "agentes": 151
+  },
+  "2023-04": {
+   "hash": "91386c8fd929065b051318348bddbe8e049a4f9d8d8c17613dccf056569b8b3b",
+   "linhas": 8695,
+   "volume_m3": 9890358.168,
+   "agentes": 150
+  },
+  "2023-05": {
+   "hash": "20b015c60e480a4c5a867ba08b33ce82d9a3038d1cc972aeb868c41f38b7e388",
+   "linhas": 9383,
+   "volume_m3": 11190251.329,
+   "agentes": 149
+  },
+  "2023-06": {
+   "hash": "31e34a959643e179dbcd4fd1ad86e7419c69c57f5b1974b266e94cce375121fa",
+   "linhas": 9439,
+   "volume_m3": 10640447.163,
+   "agentes": 149
+  },
+  "2023-07": {
+   "hash": "cd7a50cccb28abf00cb27e2bc6275af9ad22fa5025474e1709d0e354406e6344",
+   "linhas": 9718,
+   "volume_m3": 10831674.836,
+   "agentes": 151
+  },
+  "2023-08": {
+   "hash": "4bb38177dab4850cf7ea02b34e281b6be66866e4aa63465534e5bd44c1003edc",
+   "linhas": 10378,
+   "volume_m3": 11674975.465,
+   "agentes": 157
+  },
+  "2023-09": {
+   "hash": "a1ea4c01b742fc711278f41fa7d1eee5d82ae383733d159be92aa428ce56823b",
+   "linhas": 10076,
+   "volume_m3": 11137252.311,
+   "agentes": 155
+  },
+  "2023-10": {
+   "hash": "19e4815f390641ea547e19abc6cad5f5cb7775a6926b260e5a69fc46b6fef037",
+   "linhas": 10275,
+   "volume_m3": 11257956.657,
+   "agentes": 153
+  },
+  "2023-11": {
+   "hash": "996251485d5d8a43fbe974b3f64138c5faa8f60e31d368d24a82c5d6fa7ccd17",
+   "linhas": 10235,
+   "volume_m3": 10996840.847,
+   "agentes": 156
+  },
+  "2023-12": {
+   "hash": "9a25c3927f4b1cb6065c4075c78d8353699a83f27c12f51ea9739d261a5e3d30",
+   "linhas": 10478,
+   "volume_m3": 11549405.85,
+   "agentes": 152
+  },
+  "2024-01": {
+   "hash": "9b626abe63a9719646cbf896aab2878465a141117ae018475cb5a929675da2e6",
+   "linhas": 10819,
+   "volume_m3": 10733244.259,
+   "agentes": 158
+  },
+  "2024-02": {
+   "hash": "82be55972e9157e546ee9a4812d25146c43ba1883588f206bc97a6d03b0ac0d9",
+   "linhas": 10538,
+   "volume_m3": 10200438.168,
+   "agentes": 162
+  },
+  "2024-03": {
+   "hash": "5dd2a5b76b17f1265cae664d06147ab8af4a4e8c521e1f6820ec4516f4947d00",
+   "linhas": 10604,
+   "volume_m3": 11111842.74,
+   "agentes": 160
+  },
+  "2024-04": {
+   "hash": "8dc2fffc9dabcd1202ff1738911111df026665c9997896013e0060dc1434a506",
+   "linhas": 10842,
+   "volume_m3": 11273245.168,
+   "agentes": 162
+  },
+  "2024-05": {
+   "hash": "6a8882bca7c810e93773e0662ead3c0b22c6908be17c92a5c466a9d0ef9ff978",
+   "linhas": 10934,
+   "volume_m3": 11302191.544,
+   "agentes": 164
+  },
+  "2024-06": {
+   "hash": "87b1a13fade22493772e6403b450d6f1e3858b1afced5092849b77054f5716ae",
+   "linhas": 11091,
+   "volume_m3": 10989703.652,
+   "agentes": 159
+  },
+  "2024-07": {
+   "hash": "9ca0d2016546203b3fcb8230e8d649cb53bac6bebfedd62af324fed03b51711e",
+   "linhas": 11432,
+   "volume_m3": 11747829.807,
+   "agentes": 162
+  },
+  "2024-08": {
+   "hash": "ad526aec9446696b7e462aa9e613e3a2ae2d2b8065f012765d416f6beb50bae0",
+   "linhas": 11087,
+   "volume_m3": 11894529.431,
+   "agentes": 157
+  },
+  "2024-09": {
+   "hash": "1e956d58f9a6314daace6d62195993ca432b0368170fc344e8c0ee62da5a9c18",
+   "linhas": 10993,
+   "volume_m3": 11370722.743,
+   "agentes": 154
+  },
+  "2024-10": {
+   "hash": "63e429a8dcf7dab83aca9482ace62841be02248c10b49230a0a508685e056f4e",
+   "linhas": 11243,
+   "volume_m3": 12244127.331,
+   "agentes": 162
+  },
+  "2024-11": {
+   "hash": "c9d26bf4d089473ed316a3fc13993528839c92e64e49c3d27c6f05716503f2cc",
+   "linhas": 11053,
+   "volume_m3": 11317210.828,
+   "agentes": 160
+  },
+  "2024-12": {
+   "hash": "8c78b1bf5ef668c3dc95d2265fe5b970e6a18d9ec9ddee06576aede68332f926",
+   "linhas": 10980,
+   "volume_m3": 11269409.648,
+   "agentes": 155
+  },
+  "2025-01": {
+   "hash": "388097754d9d483117d9504e46d7b1a0ba492186c55b584f1a72bd78f9ade01e",
+   "linhas": 11296,
+   "volume_m3": 11161807.106,
+   "agentes": 156
+  },
+  "2025-02": {
+   "hash": "9fe4edd4d343f123d37c3dd1c59ab2c941ababe215bc3cb12801a27933787854",
+   "linhas": 11438,
+   "volume_m3": 10520065.535,
+   "agentes": 164
+  },
+  "2025-03": {
+   "hash": "01b9bff62166272619dfa98e199dd6b045bd7d9cb492c12f9493d3144f932076",
+   "linhas": 11527,
+   "volume_m3": 11267090.083,
+   "agentes": 157
+  },
+  "2025-04": {
+   "hash": "246ef36b04e26947a3049910615a639746fb3f58aa922faa19768dbfafb7ca8c",
+   "linhas": 11599,
+   "volume_m3": 11201396.113,
+   "agentes": 158
+  },
+  "2025-05": {
+   "hash": "0f9c53e7e442b10cb2714bf71fdf1ba28cf9332bf97af54e7f1e467876530b36",
+   "linhas": 11611,
+   "volume_m3": 11564248.63,
+   "agentes": 159
+  },
+  "2025-06": {
+   "hash": "3c36f081b8e4b5fed56e48d9ab09ae90a2867b8f79744d6efac64ab1a31a018e",
+   "linhas": 11762,
+   "volume_m3": 11083181.456,
+   "agentes": 161
+  },
+  "2025-07": {
+   "hash": "86ee86b3a73e8b3d56386b899e2a006ef65159a63b243c9f67eb66bf35ec620e",
+   "linhas": 11855,
+   "volume_m3": 12085072.051,
+   "agentes": 157
+  },
+  "2025-08": {
+   "hash": "465e95e912d8c021620ef801388343776cb02346f336a4aa17aaafb42111d247",
+   "linhas": 11483,
+   "volume_m3": 11690569.763,
+   "agentes": 156
+  },
+  "2025-09": {
+   "hash": "d46961888e60dc724b49ccc0fa3caf3c2a6df2904ac81ad3a2d0259e4d88559b",
+   "linhas": 11441,
+   "volume_m3": 12033020.441,
+   "agentes": 152
+  },
+  "2025-10": {
+   "hash": "ffaeeb61999fae552352d08ea86ce96404c67c59dbefcc096d1812de74a88313",
+   "linhas": 11684,
+   "volume_m3": 12516048.701,
+   "agentes": 157
+  },
+  "2025-11": {
+   "hash": "5ce5e6bd1e79e1e4647e1a396b73370fb12e3672c541872ef791d13fd42652e5",
+   "linhas": 11400,
+   "volume_m3": 11246657.909,
+   "agentes": 158
+  },
+  "2025-12": {
+   "hash": "62554616777ee373ce5d74f482198e855d5223c3e61d10b99d7e406496f9a8b5",
+   "linhas": 11465,
+   "volume_m3": 12115231.596,
+   "agentes": 153
+  },
+  "2026-01": {
+   "hash": "13252d5de29b3f34a3bb50dcdcff645e390b6fb6c4acb937110870198cfb12ab",
+   "linhas": 11605,
+   "volume_m3": 10851096.325,
+   "agentes": 153
+  },
+  "2026-02": {
+   "hash": "d6bbd24e29fe3095877425118fde96639b5d3f4ce275e25a8421d098be5ce802",
+   "linhas": 11468,
+   "volume_m3": 10679443.274,
+   "agentes": 155
+  },
+  "2026-03": {
+   "hash": "b72340a5dc75f93ef3005071b25363dc0f17657b88e309ad5864daf610c16368",
+   "linhas": 12212,
+   "volume_m3": 12356757.513,
+   "agentes": 147
+  },
+  "2026-04": {
+   "hash": "68f514073e4a8c78bed645e2dfe67e97ea058b39842867f4afcedc8d0be30db3",
+   "linhas": 11816,
+   "volume_m3": 11508581.491,
+   "agentes": 143
+  },
+  "2026-05": {
+   "hash": "53a7bad7257cb28fc3783135471a36327bf70b9456b41650b4e77b90b1cb9112",
+   "linhas": 11739,
+   "volume_m3": 11401747.274,
+   "agentes": 148
+  },
+  "2026-06": {
+   "hash": "2bebc8770bd3b8b211ac935e0ecf23fc7965c30a440debf19380d730768ab38d",
+   "linhas": 11749,
+   "volume_m3": 11515361.87,
+   "agentes": 149
+  },
+  "2026-07": {
+   "hash": "1088ed4c56b0432bbb343f244be50fdc48284b2f82060ae8f5284e0f7064517e",
+   "linhas": 12234,
+   "volume_m3": 12364578.754,
+   "agentes": 145
+  },
+  "2026-08": {
+   "hash": "d0efcc921394f0c532868aaa27f14774e761dd9fa7c1359519f69b812261fb8d",
+   "linhas": 12356,
+   "volume_m3": 12184531.491,
+   "agentes": 144
+  }
+ },
  "parciais": [],
- "estornos": 0,
- "ultima_falha": {
-  "em": "2026-10-05T10:40:39-03:00",
-  "motivo": "403 Client Error: Forbidden for url: https://www.gov.br/anp/pt-br/centrais-de-conteudo/dados-abertos/arquivos/mdpg/liquidos.zip"
+ "ultima_falha": null,
+ "conferencia": {
+  "divergencias": 226,
+  "ate": "2026-08"
  }
 }
