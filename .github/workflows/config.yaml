@@ -1,0 +1,29 @@
+# Fontes oficiais (gov.br/anp). Se uma URL falhar, localizar pela página-mãe.
+fontes:
+  pagina_mae: https://www.gov.br/anp/pt-br/centrais-de-conteudo/dados-abertos/dados-abertos-movimentacao-de-derivados-de-petroleo
+  liquidos_zip: https://www.gov.br/anp/pt-br/centrais-de-conteudo/dados-abertos/arquivos/mdpg/liquidos.zip
+  glp_zip: https://www.gov.br/anp/pt-br/centrais-de-conteudo/dados-abertos/arquivos/mdpg/glp.zip
+  conferencia_csv: https://www.gov.br/anp/pt-br/centrais-de-conteudo/dados-abertos/arquivos/vdpb/vendas-derivados-petroleo-e-etanol/vendas-combustiveis-m3-1990-2025.csv
+
+glp: false  # unidade do GLP não confirmada; não somar a líquidos sem conversão documentada
+
+arquivos_csv:
+  atual: Liquidos_Vendas_Atual.csv
+  historico: Liquidos_Vendas_Historico_2007_a_2017.csv
+
+# Histórico 2007-2016 tem cobertura incompleta frente à base de vendas da ANP
+# (-66% em 2007, -2% em 2015); só fica coerente a partir de ~mai/2016.
+incluir_historico: false
+
+encoding: cp1252
+separador: ";"
+fuso: America/Sao_Paulo
+base_geografica: destino  # destino | origem (filtros do app)
+
+qualidade:
+  max_linhas_invalidas: 0.01       # fração; acima disso a carga é interrompida
+  limiar_parcial: 0.60             # volume ou agentes < 60% da mediana dos 12 meses anteriores
+  max_parciais_seguidos: 3
+  max_queda_mes_fechado: 0.10
+  alerta_salto_estornos: 0.50      # alerta se estornos crescerem mais que 50% entre cargas
+  divergencia_conferencia: 0.01    # vs. base de vendas (m³); só vai para o log
