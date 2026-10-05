@@ -1,0 +1,477 @@
+<title>Vendas de Combustíveis ANP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: cinco campos de seleção em linha (período e estado em árvore), KPIs em faixa, gráficos em largura total e o ranking das 15 maiores distribuidoras em tabela. */
+:root{
+  --bg:#f3f6f9; --surface:#ffffff; --ink:#13202c; --muted:#58697a; --line:#dbe3ea; --accent:#1b5e8c; --accent-soft:#e3eef6;
+  --p0:#1b5e8c; --p1:#c4661a; --p2:#2c8a55; --p3:#7a5aa6;
+  --m0:#127f84; --m1:#8c4a86; --m2:#9a7d12; --m3:#b0432e; --m4:#5b6b7a;
+  --a0:#0f6fa8; --a1:#c0392b; --a2:#2e9e6b; --a3:#8e5bb5; --a4:#b9800a;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif; --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0e161d; --surface:#16212a; --ink:#e5edf4; --muted:#92a3b3; --line:#26333e; --accent:#5aa7dc; --accent-soft:#1c3446;
+  --p0:#5aa7dc; --p1:#f0a15b; --p2:#5fc58a; --p3:#b79ddb;
+  --m0:#4cc0c5; --m1:#c98bc2; --m2:#d9bb4a; --m3:#ee8a73; --m4:#9fb0c0;
+  --a0:#5fb0e6; --a1:#f08a7e; --a2:#6fd4a0; --a3:#c4a2e6; --a4:#e6b84d; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e161d; --surface:#16212a; --ink:#e5edf4; --muted:#92a3b3; --line:#26333e; --accent:#5aa7dc; --accent-soft:#1c3446;
+  --p0:#5aa7dc; --p1:#f0a15b; --p2:#5fc58a; --p3:#b79ddb;
+  --m0:#4cc0c5; --m1:#c98bc2; --m2:#d9bb4a; --m3:#ee8a73; --m4:#9fb0c0;
+  --a0:#5fb0e6; --a1:#f08a7e; --a2:#6fd4a0; --a3:#c4a2e6; --a4:#e6b84d; color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);padding-inline:16px}
+.pagina{max-width:1120px;margin-inline:auto;padding-block:20px 32px;display:flex;flex-direction:column;gap:16px}
+header{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 16px}
+h1{font-size:1.5rem;font-weight:600;margin:0;text-wrap:balance}
+.fonte{color:var(--muted);font-size:.8125rem;margin:0}
+.selo{font-size:.6875rem;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);padding:2px 8px;border-radius:3px;margin-left:8px;vertical-align:middle;font-weight:600}
+.filtros{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:14px 16px;display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:12px 14px;align-items:end}
+.campo{display:flex;flex-direction:column;gap:4px;min-width:0}
+.campo>span{font-size:.6875rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500}
+select,button,input[type=search]{font:inherit;font-size:.875rem;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:6px 8px;min-width:0}
+select:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+button{cursor:pointer}
+button:hover{border-color:var(--accent)}
+input[type=checkbox]{accent-color:var(--accent)}
+.sel{position:relative}
+.gatilho{text-align:left;display:flex;justify-content:space-between;gap:8px;overflow:hidden;white-space:nowrap}
+.rot{overflow:hidden;text-overflow:ellipsis}
+.pop{position:absolute;z-index:5;top:100%;left:0;margin-top:4px;width:min(320px,calc(100vw - 32px));max-height:400px;overflow:auto;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:8px;box-shadow:0 10px 28px rgb(0 0 0 / .22)}
+.sel.direita .pop{left:auto;right:0}
+.pop .busca{width:100%;margin-bottom:6px}
+.acoes{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.acoes button{padding:4px 8px;font-size:.8125rem}
+.lin{display:flex;gap:8px;align-items:center;padding:4px;font-size:.875rem;cursor:pointer;border-radius:3px;min-width:0}
+.lin:hover{background:var(--accent-soft)}
+.lin span{overflow-wrap:anywhere}
+.grp{display:flex;align-items:center}
+.grp .lin{flex:1}
+.seta{border:0;background:none;padding:2px 6px;width:28px;color:var(--muted)}
+.sub{margin-left:30px;display:grid;grid-template-columns:1fr 1fr}
+.pop hr{border:0;border-top:1px solid var(--line);margin:6px 0}
+.nada{margin:4px;color:var(--muted);font-size:.875rem}
+.aviso{margin:0;padding:10px 14px;border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:4px;background:var(--surface);font-size:.875rem}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));background:var(--surface);border:1px solid var(--line);border-radius:6px}
+.kpi{padding:14px 16px;min-width:0;display:flex;flex-direction:column;gap:2px;border-left:1px solid var(--line)}
+.kpi:first-child{border-left:0}
+.kpi b{font-family:var(--mono);font-weight:500;font-size:1.4rem;font-variant-numeric:tabular-nums;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.kpi small{color:var(--muted);font-size:.8125rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.kpi.dist{grid-column:1/-1;border-left:0;border-top:1px solid var(--line);gap:8px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:flex;gap:8px;align-items:center;padding:8px 10px;border:1px solid var(--line);border-radius:6px;cursor:pointer;flex:1 1 180px;min-width:0;max-width:100%}
+.chip:has(input:checked){border-color:var(--accent);background:var(--accent-soft)}
+.chip i{width:10px;height:10px;border-radius:2px;flex:none}
+.chip .txt{display:flex;flex-direction:column;min-width:0}
+.chip b{font-weight:500;font-size:.875rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chip small{font-size:.75rem;color:var(--muted);font-variant-numeric:tabular-nums}
+@media (max-width:640px){.kpi{border-left:0;border-top:1px solid var(--line)}.kpi:first-child{border-top:0}}
+.grade{display:grid;grid-template-columns:minmax(0,1fr);gap:16px}
+.painel{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:14px 16px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.painel h2{font-size:1rem;font-weight:600;margin:0}
+.painel p{margin:0;color:var(--muted);font-size:.8125rem}
+.topo{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px}
+.ctl{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;font-size:.8125rem;color:var(--muted)}
+.ctl label{display:inline-flex;align-items:center;gap:6px}
+.quadro{position:relative;height:300px;min-width:0}
+.quadro.alto{height:340px}
+.tabela{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.875rem;min-width:640px}
+th{text-align:left;font-size:.6875rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;padding:6px 8px;border-bottom:1px solid var(--line)}
+td{padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:middle}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+td.nome{min-width:200px;overflow-wrap:anywhere}
+td.part{min-width:150px;position:relative}
+.barra{display:block;height:6px;border-radius:2px;background:var(--accent);margin-bottom:3px}
+td.part em{font-style:normal;font-size:.8125rem;font-variant-numeric:tabular-nums}
+tr.resumo td{color:var(--muted);border-bottom:0}
+tr.total td{font-weight:600;border-bottom:0;border-top:1px solid var(--line)}
+footer{color:var(--muted);font-size:.8125rem;display:flex;flex-direction:column;gap:4px}
+#aviso{margin:0 0 14px}#aviso p{margin:0 0 6px;padding:10px 14px;border-radius:8px;border:1px solid var(--borda,#c9a227);background:rgba(201,162,39,.12);font-size:.9rem}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="pagina">
+  <header>
+    <h1>Vendas de combustíveis no Brasil</h1>
+    <p class="fonte">Fonte: ANP (dados abertos) · volumes em m³ · distribuidoras reguladas</p>
+  </header>
+
+  <div id="aviso" role="status"></div>
+
+  <section class="filtros" aria-label="Filtros">
+    <div id="f-per"></div><div id="f-uf"></div><div id="f-prod"></div><div id="f-merc"></div><div id="f-ag"></div>
+    <div class="campo"><span>&nbsp;</span><button type="button" id="limpar">Limpar filtros</button></div>
+  </section>
+
+  <p id="vazio" class="aviso" hidden></p>
+
+  <section class="kpis" aria-label="Indicadores">
+    <div class="kpi"><small>Volume total</small><b id="k-vol">–</b><small id="k-vol-s"></small></div>
+    <div class="kpi"><small>Variação vs. ano anterior</small><b id="k-var">–</b><small id="k-var-s"></small></div>
+    <div class="kpi"><small>Maior mercado destinatário</small><b id="k-merc">–</b><small id="k-merc-s"></small></div>
+    <div class="kpi"><small>Agentes ativos</small><b id="k-ag">–</b><small>com vendas no período</small></div>
+    <div class="kpi dist"><small>5 maiores distribuidoras · marque para filtrar a evolução e comparar entre elas</small><div class="chips" id="top5"></div></div>
+  </section>
+
+  <section class="grade">
+    <div class="painel">
+      <div class="topo"><h2 id="t-evo">Evolução do volume mensal</h2>
+        <div class="ctl"><label><input type="checkbox" id="mm"> Média móvel de 12 meses</label></div></div>
+      <p id="n-evo"></p>
+      <div class="quadro alto"><canvas id="c-evo" role="img" aria-label="Volume mensal por produto"></canvas></div>
+    </div>
+
+    <div class="painel">
+      <div class="topo"><h2>Comparação entre distribuidoras</h2>
+        <div class="ctl"><label><input type="checkbox" id="mm2"> Média móvel de 12 meses</label></div></div>
+      <p id="n-comp"></p>
+      <div class="quadro alto"><canvas id="c-comp" role="img" aria-label="Evolução do volume total das distribuidoras selecionadas"></canvas></div>
+    </div>
+
+    <div class="painel">
+      <div class="topo"><h2>Venda acumulada no período</h2></div>
+      <p id="n-acum"></p>
+      <div class="quadro alto"><canvas id="c-acum" role="img" aria-label="Venda acumulada das distribuidoras selecionadas no período"></canvas></div>
+    </div>
+
+    <div class="painel">
+      <div class="topo"><h2>15 maiores distribuidoras</h2></div>
+      <p id="rank-nota"></p>
+      <div class="tabela"><table>
+        <thead><tr><th class="num">#</th><th>Distribuidora</th><th class="num">Volume (m³)</th><th>Participação</th><th>Principal mercado</th></tr></thead>
+        <tbody id="rank-corpo"></tbody></table></div>
+    </div>
+
+    <div class="painel">
+      <div class="topo"><h2>Para quem as vendas se concentram</h2>
+        <div class="ctl"><label>Detalhar por <select id="detalhe"><option value="total">Total</option><option value="prod">Produto</option><option value="reg">Região</option><option value="ag">Distribuidora (15 maiores)</option></select></label></div></div>
+      <p id="merc-nota"></p>
+      <div class="quadro" id="q-merc"><canvas id="c-merc" role="img" aria-label="Participação por mercado destinatário"></canvas></div>
+    </div>
+  </section>
+
+  <footer>
+    <span id="rodape"></span>
+    <span>Agente = razão social declarada à ANP; um mesmo grupo pode aparecer separado. Todos os números respondem aos filtros acima. Estado e região são do destinatário (destino não informado é atribuído à UF de origem, como no painel da ANP). Mercado destinatário segue a classificação da ANP.</span>
+  </footer>
+</div>
+
+<script id="meta" type="application/json">/*META*/</script>
+<script id="bin" type="text/plain">/*BIN*/</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+const D = JSON.parse($('meta').textContent);
+const N = D.meses.length, K = D.mercados.length, NA = D.agentes.length, NR = D.n, NP = D.produtos.length;
+
+/* Linhas em colunas binárias: volume em m³ (int32), mês e agente (uint16), produto, UF e mercado (uint8). */
+const bruto = atob($('bin').textContent.trim()), bytes = new Uint8Array(bruto.length);
+for (let i = 0; i < bruto.length; i++) bytes[i] = bruto.charCodeAt(i);
+const cv = new Int32Array(bytes.buffer, 0, NR), cm = new Uint16Array(bytes.buffer, 4 * NR, NR),
+  ca = new Uint16Array(bytes.buffer, 6 * NR, NR), cp = bytes.subarray(8 * NR, 9 * NR),
+  cu = bytes.subarray(9 * NR, 10 * NR), ck = bytes.subarray(10 * NR, 11 * NR);
+
+const MES = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+const MES_LONGO = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+const fmtMes = ym => MES[+ym.slice(5) - 1] + '/' + ym.slice(0, 4);
+const nf0 = new Intl.NumberFormat('pt-BR', {maximumFractionDigits: 0});
+const nf1 = new Intl.NumberFormat('pt-BR', {minimumFractionDigits: 1, maximumFractionDigits: 1});
+const REGIOES = {Norte:['AC','AP','AM','PA','RO','RR','TO'], Nordeste:['AL','BA','CE','MA','PB','PE','PI','RN','SE'],
+  'Centro-Oeste':['DF','GO','MT','MS'], Sudeste:['ES','MG','RJ','SP'], Sul:['PR','RS','SC']};
+const REG_NOMES = Object.keys(REGIOES);
+const REG_DA_UF = D.ufs.map(u => REG_NOMES.findIndex(r => REGIOES[r].includes(u)));
+const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const sem = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+const soma = v => v.reduce((s, x) => s + x, 0);
+const curto = n => { const s = n.replace(/\s+(S\.?\/?A\.?|LTDA\.?)$/i, '').replace(/ DISTRIBUIDORA.*| COMBUSTÍVEIS.*| PRODUTOS DE.*/i, '').trim();
+  return s.length > 26 ? s.slice(0, 25) + '…' : s; };
+
+/* ---------- campo de seleção reutilizável (lista com marcação, busca e árvore opcional) ---------- */
+const fechadores = [];
+function fecharTodos() { fechadores.forEach(f => f()); }
+function seletor(cfg) {
+  const itens = cfg.itens, n = itens.length, sel = new Uint8Array(n).fill(1);
+  let grupos = itens[0].g === undefined ? null : (cfg.ordem || [...new Set(itens.map(i => i.g))]);
+  if (grupos && cfg.inverter) grupos = [...grupos].reverse();
+  const aberto = new Set(cfg.abertos || []);
+  let busca = '';
+  const el = cfg.el;
+  el.className = 'campo sel' + (cfg.direita ? ' direita' : '');
+  el.innerHTML = `<span>${cfg.titulo}</span><button type="button" class="gatilho" aria-expanded="false"><span class="rot"></span><span aria-hidden="true">▾</span></button>` +
+    `<div class="pop" hidden>${cfg.busca ? '<input type="search" class="busca" placeholder="Buscar…" aria-label="Buscar">' : ''}` +
+    '<div class="acoes"><label class="lin"><input type="checkbox" class="todos"><span>(Selecionar tudo)</span></label><button type="button" class="limpar-sel">Limpar seleção</button></div><hr><div class="lista"></div></div>';
+  const gatilho = el.querySelector('.gatilho'), pop = el.querySelector('.pop'), rot = el.querySelector('.rot'), L = el.querySelector('.lista');
+  const visivel = i => !busca || sem(itens[i].r).includes(busca);
+  const ids = () => itens.map((_, i) => i).filter(visivel);
+  const rotuloPadrao = () => {
+    const s = [...Array(n).keys()].filter(i => sel[i]);
+    if (s.length === n) return 'Todos';
+    if (!s.length) return 'Nenhum';
+    return s.length <= 2 ? s.map(i => (cfg.curto || (x => x))(itens[i].r)).join(', ') : `${s.length} de ${n} selecionados`;
+  };
+  const marcar = () => {
+    const v = ids(), q = v.filter(i => sel[i]).length, t = pop.querySelector('.todos');
+    t.checked = v.length > 0 && q === v.length; t.indeterminate = q > 0 && q < v.length;
+    pop.querySelectorAll('[data-i]').forEach(c => c.checked = !!sel[+c.dataset.i]);
+    pop.querySelectorAll('[data-gc]').forEach(c => {
+      const gi = v.filter(i => itens[i].g === c.dataset.gc), k = gi.filter(i => sel[i]).length;
+      c.checked = gi.length > 0 && k === gi.length; c.indeterminate = k > 0 && k < gi.length;
+    });
+    rot.textContent = cfg.rotulo ? cfg.rotulo(sel) : rotuloPadrao();
+  };
+  const lista = () => {
+    const v = ids(), linha = i => `<label class="lin"><input type="checkbox" data-i="${i}"><span>${esc(itens[i].r)}</span></label>`;
+    let h = '';
+    if (!grupos) h = v.map(linha).join('');
+    else for (const g of grupos) {
+      const gi = v.filter(i => itens[i].g === g);
+      if (!gi.length) continue;
+      const ab = busca || aberto.has(g);
+      h += `<div class="grp"><button type="button" class="seta" data-g="${g}" aria-expanded="${!!ab}" aria-label="${ab ? 'Fechar' : 'Abrir'} ${g}">${ab ? '▾' : '▸'}</button>` +
+        `<label class="lin"><input type="checkbox" data-gc="${g}"><span>${g}</span></label></div>`;
+      if (ab) h += `<div class="sub">${gi.map(linha).join('')}</div>`;
+    }
+    L.innerHTML = h || '<p class="nada">Nenhum resultado</p>';
+    marcar();
+  };
+  const fechar = () => { pop.hidden = true; gatilho.setAttribute('aria-expanded', 'false'); };
+  fechadores.push(fechar);
+  gatilho.onclick = () => {
+    const abrir = pop.hidden; fecharTodos();
+    pop.hidden = !abrir; gatilho.setAttribute('aria-expanded', String(abrir));
+    if (abrir) pop.querySelector('.busca')?.focus();
+  };
+  pop.addEventListener('click', e => {
+    const b = e.target.closest('.seta');
+    if (b) { aberto.has(b.dataset.g) ? aberto.delete(b.dataset.g) : aberto.add(b.dataset.g); lista(); }
+    else if (e.target.classList.contains('limpar-sel')) { sel.fill(0); marcar(); cfg.mudou(); }
+  });
+  pop.addEventListener('change', e => {
+    const c = e.target, val = c.checked ? 1 : 0;
+    if (c.classList.contains('todos')) ids().forEach(i => sel[i] = val);
+    else if (c.dataset.gc !== undefined) ids().filter(i => itens[i].g === c.dataset.gc).forEach(i => sel[i] = val);
+    else if (c.dataset.i !== undefined) sel[+c.dataset.i] = val;
+    else return;
+    marcar(); cfg.mudou();
+  });
+  pop.addEventListener('input', e => {
+    if (e.target.classList.contains('busca')) { busca = sem(e.target.value.trim()); lista(); }
+  });
+  lista();
+  return {sel, titulo: cfg.titulo, rotulo: () => rot.textContent,
+    reset() { sel.fill(1); busca = ''; const b = pop.querySelector('.busca'); if (b) b.value = ''; lista(); }};
+}
+
+function rotuloPeriodo(sel) {
+  const ids = [...sel.keys()].filter(i => sel[i]), n = ids.length;
+  if (!n) return 'Nenhum';
+  const a = D.meses[ids[0]], b = D.meses[ids[n - 1]], anos = [...new Set(ids.map(i => D.meses[i].slice(0, 4)))];
+  if (n === N) return `Todos · ${fmtMes(a)} a ${fmtMes(b)}`;
+  if (anos.length === 1 && n === D.meses.filter(m => m.startsWith(anos[0])).length) return anos[0];
+  if (ids[n - 1] - ids[0] === n - 1) return n === 1 ? fmtMes(a) : `${fmtMes(a)} a ${fmtMes(b)}`;
+  return `${n} meses selecionados`;
+}
+
+const mudou = () => render();
+const F = {
+  per: seletor({el: $('f-per'), titulo: 'Período', mudou, inverter: true, abertos: [D.meses[N - 1].slice(0, 4)], rotulo: rotuloPeriodo,
+    itens: D.meses.map(m => ({r: MES_LONGO[+m.slice(5) - 1], g: m.slice(0, 4)}))}),
+  uf: seletor({el: $('f-uf'), titulo: 'Estado (destino)', mudou, ordem: REG_NOMES,
+    itens: D.ufs.map(u => ({r: u, g: REG_NOMES[REG_DA_UF[D.ufs.indexOf(u)]]}))}),
+  prod: seletor({el: $('f-prod'), titulo: 'Produto', mudou, itens: D.produtos.map(r => ({r}))}),
+  merc: seletor({el: $('f-merc'), titulo: 'Mercado destinatário', mudou, direita: true, itens: D.mercados.map(r => ({r}))}),
+  ag: seletor({el: $('f-ag'), titulo: 'Distribuidora', mudou, direita: true, busca: true, curto, itens: D.agentes.map(r => ({r}))}),
+};
+// composedPath guarda o caminho do clique; e.target pode já ter saído da página quando a lista é redesenhada (seta de expandir)
+document.addEventListener('click', e => { if (!e.composedPath().some(n => n.classList?.contains('sel'))) fecharTodos(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') fecharTodos(); });
+const st = {detalhe: 'total', mm: false, mm2: false, agSel: new Set()};
+$('mm').onchange = e => { st.mm = e.target.checked; render(); };
+$('mm2').onchange = e => { st.mm2 = e.target.checked; render(); };
+$('top5').addEventListener('change', e => {
+  const a = +e.target.dataset.a;
+  e.target.checked ? st.agSel.add(a) : st.agSel.delete(a);
+  render();
+});
+$('detalhe').onchange = e => { st.detalhe = e.target.value; render(); };
+$('limpar').onclick = () => {
+  Object.values(F).forEach(f => f.reset());
+  Object.assign(st, {detalhe: 'total', mm: false, mm2: false, agSel: new Set()});
+  $('mm').checked = false; $('mm2').checked = false; $('detalhe').value = 'total';
+  render();
+};
+
+/* ---------- cálculo ---------- */
+function calcular() {
+  const sm = F.per.sel, sp = F.prod.sel, su = F.uf.sel, sa = F.ag.sel, sk = F.merc.sel;
+  const mk = n => Array.from({length: n}, () => new Float64Array(K));
+  const M = D.produtos.map(() => new Float64Array(N));
+  const porAg = new Float64Array(NA);
+  const totMk = new Float64Array(K), prodMk = mk(D.produtos.length), regMk = mk(REG_NOMES.length), agMk = mk(NA);
+  const AM = new Float64Array(NA * NP * N); // distribuidora × produto × mês (série completa, para as comparações)
+  let total = 0, atualComp = 0, prev = 0;
+  const parc = D.meses.map(m => (D.parciais || []).includes(m));
+  for (let r = 0; r < NR; r++) {
+    const m = cm[r], p = cp[r], u = cu[r], a = ca[r], k = ck[r], v = cv[r];
+    if (!sp[p] || !sk[k] || !su[u] || !sa[a]) continue;
+    M[p][m] += v; AM[(a * NP + p) * N + m] += v;
+    if (sm[m]) {
+      porAg[a] += v; total += v;
+      totMk[k] += v; prodMk[p][k] += v; regMk[REG_DA_UF[u]][k] += v; agMk[a][k] += v;
+      if (m >= 12 && !parc[m] && !parc[m - 12]) atualComp += v;
+    }
+    if (m + 12 < N && sm[m + 12] && !parc[m] && !parc[m + 12]) prev += v;
+  }
+  const comparaveis = [...sm.keys()].filter(i => sm[i] && i >= 12 && !parc[i] && !parc[i - 12]).length;
+  const ordemAg = [...Array(NA).keys()].filter(a => porAg[a] > 0).sort((x, y) => porAg[y] - porAg[x]);
+  return {M, AM, porAg, totMk, prodMk, regMk, agMk, total, atualComp, prev, comparaveis, ordemAg};
+}
+
+/* ---------- apresentação ---------- */
+const charts = {};
+function desenhar(id, cfg) { charts[id]?.destroy(); charts[id] = new Chart($(id), cfg); }
+function base() {
+  Chart.defaults.font.family = css('--sans') || 'sans-serif';
+  Chart.defaults.color = css('--muted');
+  Chart.defaults.borderColor = css('--line');
+  Chart.defaults.maintainAspectRatio = false;
+}
+function kpis(c) {
+  const nm = F.per.sel.reduce((s, x) => s + x, 0);
+  $('k-vol').textContent = nf1.format(c.total / 1e6) + ' mi m³';
+  $('k-vol-s').textContent = F.per.rotulo() + (nm < N ? ` · ${nm} meses` : '');
+  if (c.comparaveis && c.prev) {
+    const v = (c.atualComp / c.prev - 1) * 100;
+    $('k-var').textContent = (v > 0 ? '+' : '') + nf1.format(v) + '%';
+    $('k-var-s').textContent = `vs. ${nf1.format(c.prev / 1e6)} mi m³ nos mesmos ${c.comparaveis} meses do ano anterior`;
+  } else { $('k-var').textContent = '–'; $('k-var-s').textContent = 'sem período anterior na base'; }
+  const ks = [...Array(K).keys()].filter(k => F.merc.sel[k]).sort((a, b) => c.totMk[b] - c.totMk[a]);
+  $('k-merc').textContent = c.total && ks.length ? D.mercados[ks[0]] : '–';
+  $('k-merc-s').textContent = c.total && ks.length ? nf1.format(c.totMk[ks[0]] / c.total * 100) + '% do volume' : '';
+  $('k-ag').textContent = nf0.format(c.ordemAg.length);
+}
+const opLinha = () => ({interaction: {mode: 'index', intersect: false},
+  plugins: {legend: {position: 'bottom'}, tooltip: {callbacks: {label: x => ` ${x.dataset.label}: ${nf0.format(x.parsed.y * 1e3)} m³`}}},
+  scales: {y: {beginAtZero: true, title: {display: true, text: 'mil m³'}, ticks: {callback: v => nf0.format(v)}},
+    x: {ticks: {maxTicksLimit: 10, maxRotation: 0}, grid: {display: false}}}});
+const mesesSelecionados = () => [...F.per.sel.keys()].filter(i => F.per.sel[i]);
+const prodsSelecionados = () => [...Array(NP).keys()].filter(p => F.prod.sel[p]);
+/* Série em mil m³ nos meses escolhidos; com média móvel, calculada sobre os 12 meses anteriores da base completa. */
+const serie = (idx, f, mm) => idx.map(m => {
+  if (!mm) return f(m) / 1e3;
+  if (m < 11) return null;
+  let s = 0; for (let k = m - 11; k <= m; k++) s += f(k);
+  return s / 12 / 1e3;
+});
+const linha = (idx, label, cor, data) => ({label, borderColor: cor, backgroundColor: cor, borderWidth: 2, pointRadius: idx.length < 30 ? 2 : 0, pointHoverRadius: 4, tension: 0.15, data});
+const grafico = (id, idx, ds) => desenhar(id, {type: 'line', data: {labels: idx.map(m => fmtMes(D.meses[m])), datasets: ds}, options: opLinha()});
+
+/* As 5 maiores distribuidoras seguem os filtros; marcar uma ou mais delimita os dois gráficos de evolução. */
+function chips(c) {
+  const top = c.ordemAg.slice(0, 5);
+  st.agSel = new Set([...st.agSel].filter(a => top.includes(a)));
+  $('top5').innerHTML = top.map((a, i) => `<label class="chip"><input type="checkbox" data-a="${a}"${st.agSel.has(a) ? ' checked' : ''}><i style="background:var(--a${i})"></i>` +
+    `<span class="txt"><b title="${esc(D.agentes[a])}">${i + 1}. ${esc(curto(D.agentes[a]))}</b><small>${nf1.format(c.porAg[a] / c.total * 100)}% · ${nf1.format(c.porAg[a] / 1e6)} mi m³</small></span></label>`).join('')
+    || '<p class="nada">Sem vendas na seleção atual.</p>';
+  return top;
+}
+
+/* Evolução por produto. Sem distribuidora marcada: total. Marcadas: soma delas. */
+function evolucao(c, top) {
+  const sel = top.filter(a => st.agSel.has(a)), idx = mesesSelecionados();
+  const valor = sel.length ? (p, m) => sel.reduce((s, a) => s + c.AM[(a * NP + p) * N + m], 0) : (p, m) => c.M[p][m];
+  const ds = prodsSelecionados().map(p => linha(idx, D.produtos[p], css('--p' + p), serie(idx, m => valor(p, m), st.mm)));
+  if (!sel.length) { $('t-evo').textContent = 'Evolução do volume mensal'; $('n-evo').textContent = 'Total das distribuidoras, por produto. Marque uma ou mais das 5 maiores para ver só elas.'; }
+  else if (sel.length === 1) { $('t-evo').textContent = `Evolução de ${curto(D.agentes[sel[0]])} por produto`; $('n-evo').textContent = D.agentes[sel[0]] + ' · volume mensal de cada produto.'; }
+  else { $('t-evo').textContent = `Evolução das ${sel.length} distribuidoras marcadas por produto`; $('n-evo').textContent = 'Soma das distribuidoras marcadas, por produto.'; }
+  grafico('c-evo', idx, ds);
+}
+
+/* Distribuidoras dos gráficos de comparação: as marcadas ou, sem marcação, as 5 maiores. */
+const alvoDist = top => { const marcadas = top.filter(a => st.agSel.has(a)); return {marcadas, alvo: marcadas.length ? marcadas : top}; };
+const mensalDist = (c, a, prods) => m => prods.reduce((s, p) => s + c.AM[(a * NP + p) * N + m], 0);
+const rotuloAlvo = marcadas => (marcadas.length ? 'Distribuidoras marcadas' : 'Nenhuma marcada: mostrando as 5 maiores') + ', produtos somados conforme o filtro de produto.';
+
+/* Comparação: uma linha por distribuidora com o volume total mensal. */
+function comparacao(c, top) {
+  const {marcadas, alvo} = alvoDist(top), idx = mesesSelecionados(), prods = prodsSelecionados();
+  $('n-comp').textContent = 'Volume total mensal. ' + rotuloAlvo(marcadas);
+  grafico('c-comp', idx, alvo.map(a => linha(idx, curto(D.agentes[a]), css('--a' + top.indexOf(a)), serie(idx, mensalDist(c, a, prods), st.mm2))));
+}
+
+/* Venda acumulada: soma mês a mês, a partir do primeiro mês do período selecionado. */
+function acumulada(c, top) {
+  const {marcadas, alvo} = alvoDist(top), idx = mesesSelecionados(), prods = prodsSelecionados();
+  $('n-acum').textContent = (idx.length ? `Soma acumulada dos meses selecionados, desde ${fmtMes(D.meses[idx[0]])}. ` : '') + rotuloAlvo(marcadas);
+  grafico('c-acum', idx, alvo.map(a => {
+    const mensal = mensalDist(c, a, prods); let ac = 0;
+    return linha(idx, curto(D.agentes[a]), css('--a' + top.indexOf(a)), idx.map(m => (ac += mensal(m)) / 1e3));
+  }));
+}
+
+function ranking(c) {
+  const top = c.ordemAg.slice(0, 15), max = top.length ? c.porAg[top[0]] : 1, topo = soma(top.map(a => c.porAg[a]));
+  $('rank-nota').textContent = top.length
+    ? `As ${top.length} maiores somam ${nf1.format(topo / c.total * 100)}% do volume selecionado (${c.ordemAg.length} distribuidoras com vendas).`
+    : 'Nenhuma venda para a seleção atual.';
+  const principal = a => { const k = [...Array(K).keys()].sort((x, y) => c.agMk[a][y] - c.agMk[a][x])[0];
+    return `${D.mercados[k]} · ${nf0.format(c.agMk[a][k] / c.porAg[a] * 100)}%`; };
+  let h = top.map((a, i) => `<tr><td class="num">${i + 1}</td><td class="nome">${esc(D.agentes[a])}</td><td class="num">${nf0.format(c.porAg[a])}</td>` +
+    `<td class="part"><span class="barra" style="width:${c.porAg[a] / max * 100}%"></span><em>${nf1.format(c.porAg[a] / c.total * 100)}%</em></td><td>${principal(a)}</td></tr>`).join('');
+  if (top.length && c.ordemAg.length > top.length)
+    h += `<tr class="resumo"><td></td><td>Demais ${c.ordemAg.length - top.length} distribuidoras</td><td class="num">${nf0.format(c.total - topo)}</td><td>${nf1.format((c.total - topo) / c.total * 100)}%</td><td></td></tr>`;
+  if (top.length) h += `<tr class="total"><td></td><td>Total selecionado</td><td class="num">${nf0.format(c.total)}</td><td>100,0%</td><td></td></tr>`;
+  $('rank-corpo').innerHTML = h || '<tr><td colspan="5">Sem dados para a seleção.</td></tr>';
+}
+function mercado(c) {
+  const ks = [...Array(K).keys()].filter(k => F.merc.sel[k]), totalMk = soma(c.totMk);
+  const nota = {total: 'Participação de cada mercado destinatário no volume selecionado.',
+    prod: 'Cada barra soma 100% do volume do produto; os trechos mostram o mercado destinatário.',
+    reg: 'Cada barra soma 100% do volume da região de destino; os trechos mostram o mercado destinatário.',
+    ag: 'Cada barra soma 100% do volume da distribuidora (15 maiores da seleção); os trechos mostram o mercado destinatário.'};
+  $('merc-nota').textContent = nota[st.detalhe];
+  $('q-merc').style.height = st.detalhe === 'ag' ? '560px' : '300px';
+  if (st.detalhe === 'total') {
+    const e = ks.map(k => [D.mercados[k], totalMk ? c.totMk[k] / totalMk * 100 : 0, c.totMk[k], k]).sort((a, b) => b[1] - a[1]);
+    desenhar('c-merc', {type: 'bar', data: {labels: e.map(x => x[0]), datasets: [{data: e.map(x => x[1]), backgroundColor: e.map(x => css('--m' + x[3])), borderWidth: 0, borderRadius: 2}]},
+      options: {indexAxis: 'y', plugins: {legend: {display: false}, tooltip: {callbacks: {label: x => ` ${nf1.format(x.parsed.x)}% · ${nf0.format(e[x.dataIndex][2])} m³`}}},
+        scales: {x: {beginAtZero: true, ticks: {callback: v => nf0.format(v) + '%'}, title: {display: true, text: 'participação no volume'}}, y: {grid: {display: false}}}}});
+    return;
+  }
+  let g;
+  if (st.detalhe === 'prod') g = [...D.produtos.keys()].filter(p => F.prod.sel[p]).map(p => [D.produtos[p], c.prodMk[p]]);
+  else if (st.detalhe === 'reg') g = REG_NOMES.map((r, i) => [r, c.regMk[i]]);
+  else {
+    const resto = new Float64Array(K);
+    c.ordemAg.slice(15).forEach(a => c.agMk[a].forEach((v, k) => resto[k] += v));
+    g = [...c.ordemAg.slice(0, 15).map(a => [curto(D.agentes[a]), c.agMk[a]]), ['Demais distribuidoras', resto]];
+  }
+  g = g.map(([n, v]) => [n, v, ks.reduce((s, k) => s + v[k], 0)]).filter(x => x[2] > 0);
+  if (st.detalhe !== 'ag') g.sort((a, b) => b[2] - a[2]);
+  desenhar('c-merc', {type: 'bar',
+    data: {labels: g.map(x => x[0]), datasets: ks.map(k => ({label: D.mercados[k], backgroundColor: css('--m' + k), borderWidth: 0, data: g.map(x => x[1][k] / x[2] * 100)}))},
+    options: {indexAxis: 'y', plugins: {legend: {position: 'bottom'},
+      tooltip: {callbacks: {label: x => ` ${x.dataset.label}: ${nf1.format(x.parsed.x)}% · ${nf0.format(g[x.dataIndex][1][ks[x.datasetIndex]])} m³`}}},
+      scales: {x: {stacked: true, min: 0, max: 100, ticks: {callback: v => v + '%'}, title: {display: true, text: 'participação no volume do grupo'}}, y: {stacked: true, grid: {display: false}}}}});
+}
+function render() {
+  base();
+  const vazios = Object.values(F).filter(f => !f.sel.some(x => x)).map(f => f.titulo);
+  $('vazio').hidden = !vazios.length;
+  if (vazios.length) $('vazio').textContent = `Nenhum item selecionado em: ${vazios.join(', ')}. Marque ao menos um para ver os dados.`;
+  const c = calcular();
+  const top = chips(c);
+  kpis(c); evolucao(c, top); comparacao(c, top); acumulada(c, top); ranking(c); mercado(c);
+}
+
+const [aa, mm, dd] = D.atualizado.split('-');
+$('rodape').textContent = `Fonte: ANP (dados abertos). Última atualização: ${dd}/${mm}/${aa} · Período coberto: ${fmtMes(D.meses[0])} a ${fmtMes(D.meses[N - 1])}`;
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', render);
+new MutationObserver(render).observe(document.documentElement, {attributes: true, attributeFilter: ['data-theme']});
+const av = $('aviso');
+av.innerHTML = (D.avisos || []).map(t => `<p>${esc(t)}</p>`).join('');
+av.hidden = !(D.avisos || []).length;
+render();
+</script>
