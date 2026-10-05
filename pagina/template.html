@@ -344,8 +344,9 @@ function base() {
 }
 function kpis(c) {
   const nm = F.per.sel.reduce((s, x) => s + x, 0);
-  $('k-vol').textContent = nf2.format(c.total / 1e3) + ' mil m³';
-  $('k-vol-s').textContent = F.per.rotulo() + (nm < N ? ` · ${nm} meses` : '');
+  // destaque no formato do gráfico do painel da ANP ("0,28 Mil"); a unidade exata fica na linha abaixo
+  $('k-vol').textContent = nf2.format(c.total / 1e6) + ' Mil';
+  $('k-vol-s').textContent = `${nf2.format(c.total / 1e3)} mil m³ · ` + F.per.rotulo() + (nm < N ? ` · ${nm} meses` : '');
   if (c.comparaveis && c.prev) {
     const v = (c.atualComp / c.prev - 1) * 100;
     $('k-var').textContent = (v > 0 ? '+' : '') + nf1.format(v) + '%';
