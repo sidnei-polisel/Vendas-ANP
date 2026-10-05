@@ -1,0 +1,85 @@
+name: Atualizar dados ANP e publicar página
+on:
+  schedule:
+    - cron: "17 9 5,28 * *"   # dias 5 e 28, 06:17 em Brasília (UTC-3)
+  workflow_dispatch:
+    inputs:
+      forcar:
+        description: "Baixar e processar mesmo sem mudança na ANP"
+        type: boolean
+        default: false
+  push:
+    branches: [main]
+    paths: ["pagina/**", ".github/workflows/atualizar.yml"]
+
+concurrency:
+  group: atualizar-dados
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  atualizar:
+    if: github.event_name != 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements-dev.txt
+      - run: python -m pytest -q
+      - name: Atualizar
+        id: atualizar
+        continue-on-error: true
+        run: python -m ingest.atualizar ${{ inputs.forcar && '--forcar' || '' }}
+      - name: Commit (só se algo mudou)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data
+          if git diff --cached --quiet; then
+            echo "Nada a commitar"
+          else
+            git commit -m "dados: atualização ANP $(date -u +%Y-%m-%d)"
+            git pull --rebase
+            git push
+          fi
+      - name: Falhar o job se a atualização falhou
+        if: steps.atualizar.outcome == 'failure'
+        run: |
+          echo "Atualização falhou; base preservada e state.json registra ultima_falha."
+          exit 1
+
+  publicar:
+    needs: atualizar
+    if: always() && (needs.atualizar.result == 'success' || needs.atualizar.result == 'failure' || needs.atualizar.result == 'skipped')
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Gerar página
+        run: python -m pagina.build --saida docs
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs
+      - id: deployment
+        uses: actions/deploy-pages@v4
