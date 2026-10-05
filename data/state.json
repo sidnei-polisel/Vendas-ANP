@@ -1,0 +1,10 @@
+{
+ "fonte": {},
+ "meses": {},
+ "parciais": [],
+ "estornos": 0,
+ "ultima_falha": {
+  "em": "2026-10-05T10:40:39-03:00",
+  "motivo": "403 Client Error: Forbidden for url: https://www.gov.br/anp/pt-br/centrais-de-conteudo/dados-abertos/arquivos/mdpg/liquidos.zip"
+ }
+}
