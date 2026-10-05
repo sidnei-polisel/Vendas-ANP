@@ -87,6 +87,7 @@ td.part em{font-style:normal;font-size:.8125rem;font-variant-numeric:tabular-num
 tr.resumo td{color:var(--muted);border-bottom:0}
 tr.total td{font-weight:600;border-bottom:0;border-top:1px solid var(--line)}
 footer{color:var(--muted);font-size:.8125rem;display:flex;flex-direction:column;gap:4px}
+h3.sub{margin:18px 0 6px;font-size:.95rem;font-weight:600}
 #aviso{margin:0 0 14px}#aviso p{margin:0 0 6px;padding:10px 14px;border-radius:8px;border:1px solid var(--borda,#c9a227);background:rgba(201,162,39,.12);font-size:.9rem}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
@@ -148,6 +149,8 @@ footer{color:var(--muted);font-size:.8125rem;display:flex;flex-direction:column;
         <div class="ctl"><label>Detalhar por <select id="detalhe"><option value="total">Total</option><option value="prod">Produto</option><option value="reg">Região</option><option value="ag">Distribuidora (15 maiores)</option></select></label></div></div>
       <p id="merc-nota"></p>
       <div class="quadro" id="q-merc"><canvas id="c-merc" role="img" aria-label="Participação por mercado destinatário"></canvas></div>
+      <h3 class="sub">Vendas por mercado destinatário e região (mil m³)</h3>
+      <div class="tabela"><table id="t-regmerc"></table></div>
     </div>
   </section>
 
@@ -177,6 +180,7 @@ const MES_LONGO = ['janeiro','fevereiro','março','abril','maio','junho','julho'
 const fmtMes = ym => MES[+ym.slice(5) - 1] + '/' + ym.slice(0, 4);
 const nf0 = new Intl.NumberFormat('pt-BR', {maximumFractionDigits: 0});
 const nf1 = new Intl.NumberFormat('pt-BR', {minimumFractionDigits: 1, maximumFractionDigits: 1});
+const nf2 = new Intl.NumberFormat('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2});
 const REGIOES = {Norte:['AC','AP','AM','PA','RO','RR','TO'], Nordeste:['AL','BA','CE','MA','PB','PE','PI','RN','SE'],
   'Centro-Oeste':['DF','GO','MT','MS'], Sudeste:['ES','MG','RJ','SP'], Sul:['PR','RS','SC']};
 const REG_NOMES = Object.keys(REGIOES);
@@ -340,12 +344,12 @@ function base() {
 }
 function kpis(c) {
   const nm = F.per.sel.reduce((s, x) => s + x, 0);
-  $('k-vol').textContent = nf1.format(c.total / 1e6) + ' mi m³';
+  $('k-vol').textContent = nf2.format(c.total / 1e3) + ' mil m³';
   $('k-vol-s').textContent = F.per.rotulo() + (nm < N ? ` · ${nm} meses` : '');
   if (c.comparaveis && c.prev) {
     const v = (c.atualComp / c.prev - 1) * 100;
     $('k-var').textContent = (v > 0 ? '+' : '') + nf1.format(v) + '%';
-    $('k-var-s').textContent = `vs. ${nf1.format(c.prev / 1e6)} mi m³ nos mesmos ${c.comparaveis} meses do ano anterior`;
+    $('k-var-s').textContent = `vs. ${nf2.format(c.prev / 1e3)} mil m³ nos mesmos ${c.comparaveis} meses do ano anterior`;
   } else { $('k-var').textContent = '–'; $('k-var-s').textContent = 'sem período anterior na base'; }
   const ks = [...Array(K).keys()].filter(k => F.merc.sel[k]).sort((a, b) => c.totMk[b] - c.totMk[a]);
   $('k-merc').textContent = c.total && ks.length ? D.mercados[ks[0]] : '–';
@@ -456,6 +460,19 @@ function mercado(c) {
       tooltip: {callbacks: {label: x => ` ${x.dataset.label}: ${nf1.format(x.parsed.x)}% · ${nf0.format(g[x.dataIndex][1][ks[x.datasetIndex]])} m³`}}},
       scales: {x: {stacked: true, min: 0, max: 100, ticks: {callback: v => v + '%'}, title: {display: true, text: 'participação no volume do grupo'}}, y: {stacked: true, grid: {display: false}}}}});
 }
+/* Mesmo quadro do painel da ANP: mercado destinatário x região, vendas em mil m³ e % do total (2 casas). */
+function tabelaRegiao(c) {
+  const regs = REG_NOMES.filter((_, r) => c.regMk[r].some(v => v > 0)), tot = c.total, t = $('t-regmerc');
+  if (!tot || !regs.length) { t.innerHTML = ''; return; }
+  const cel = v => `<td class="num">${nf2.format(v / 1e3)}</td><td class="num">${nf2.format(v / tot * 100)}%</td>`;
+  let h = '<thead><tr><th rowspan="2">Mercado destinatário</th>' + regs.map(r => `<th colspan="2" class="num">${r}</th>`).join('') +
+    '<th colspan="2" class="num">Total</th></tr><tr>' + [...regs, 'Total'].map(() => '<th class="num">Vendas</th><th class="num">%</th>').join('') + '</tr></thead><tbody>';
+  const ordem = [...D.mercados.keys()].filter(k => c.totMk[k] > 0).sort((a, b) => c.totMk[b] - c.totMk[a]);
+  ordem.forEach(k => { h += `<tr><td>${esc(D.mercados[k])}</td>` + regs.map(r => cel(c.regMk[REG_NOMES.indexOf(r)][k])).join('') + cel(c.totMk[k]) + '</tr>'; });
+  h += '<tr class="resumo"><td>Total</td>' + regs.map(r => cel(soma(Array.from(c.regMk[REG_NOMES.indexOf(r)])))).join('') + cel(tot) + '</tr></tbody>';
+  t.innerHTML = h;
+}
+
 function render() {
   base();
   const vazios = Object.values(F).filter(f => !f.sel.some(x => x)).map(f => f.titulo);
@@ -463,7 +480,7 @@ function render() {
   if (vazios.length) $('vazio').textContent = `Nenhum item selecionado em: ${vazios.join(', ')}. Marque ao menos um para ver os dados.`;
   const c = calcular();
   const top = chips(c);
-  kpis(c); evolucao(c, top); comparacao(c, top); acumulada(c, top); ranking(c); mercado(c);
+  kpis(c); evolucao(c, top); comparacao(c, top); acumulada(c, top); ranking(c); mercado(c); tabelaRegiao(c);
 }
 
 const [aa, mm, dd] = D.atualizado.split('-');
