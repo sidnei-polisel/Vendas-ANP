@@ -27,11 +27,18 @@ def _conferir(cfg, sess, agregado, estado_novo, data):
         log.warning("conferência não executada: %s", e)
 
 
-def atualizar(cfg, data, forcar=False, sess=None, pasta=None):
-    """Retorna 0 (atualizado ou sem mudança) ou 1 (falha; base preservada)."""
+def atualizar(cfg, data, forcar=False, sess=None, pasta=None, zip_local=None):
+    """Retorna 0 (atualizado ou sem mudança) ou 1 (falha; base preservada).
+
+    `zip_local`: processa um liquidos.zip já baixado (plano B quando a ANP bloqueia o download automático).
+    """
     sess = sess or fonte.sessao()
     estado = store.ler_estado(data)
     try:
+        if zip_local:
+            novo, agregado = run.executar(Path(zip_local), cfg, data, False, estado, None)
+            _conferir(cfg, sess, agregado, novo, data)
+            return 0
         url, head = fonte.achar_url(cfg, sess)
         remoto = fonte.assinatura(head.headers)
         if not forcar and not estado.get("ultima_falha") and not fonte.mudou(remoto, estado["fonte"]):
@@ -53,11 +60,12 @@ def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--config", default="config.yaml", type=Path)
     ap.add_argument("--data", default="data", type=Path)
+    ap.add_argument("--zip", type=Path, help="liquidos.zip já baixado (pula o download)")
     ap.add_argument("--forcar", action="store_true", help="baixa e processa mesmo sem mudança")
     a = ap.parse_args(argv)
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
     cfg = yaml.safe_load(a.config.read_text(encoding="utf-8"))
-    return atualizar(cfg, a.data, a.forcar)
+    return atualizar(cfg, a.data, a.forcar, zip_local=a.zip)
 
 
 if __name__ == "__main__":

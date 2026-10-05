@@ -9,7 +9,10 @@ from urllib.parse import urljoin
 
 
 log = logging.getLogger("ingest")
-UA = {"User-Agent": "anp-combustiveis/1.0 (dados abertos)"}
+# O gov.br recusa clientes sem cara de navegador; é o mesmo arquivo público de dados abertos.
+UA = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
+                    "Chrome/124.0 Safari/537.36",
+      "Accept": "*/*", "Accept-Language": "pt-BR,pt;q=0.9,en;q=0.5"}
 
 
 def assinatura(h):

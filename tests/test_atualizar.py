@@ -131,3 +131,18 @@ def test_conferencia_ler_e_comparar():
 def test_conferencia_ler_utf8_com_bom():
     csv = "﻿ANO;MÊS;GRANDE REGIÃO;UNIDADE DA FEDERAÇÃO;PRODUTO;VENDAS\n2025;JUN;REGIÃO SUDESTE;SÃO PAULO;ÓLEO DIESEL;1163897,378\n".encode("utf-8")
     assert conferencia.ler(csv).vendas_m3.tolist() == [1163897.378]
+
+
+def test_zip_local_nao_usa_a_rede(tmp_path):
+    z = tmp_path / "liquidos.zip"
+    z.write_bytes(_zip_bytes())
+
+    class SemRede(Sessao):
+        def head(self, *a, **k):
+            raise AssertionError("não deveria consultar a ANP")
+
+        def get(self, url, **k):  # só a conferência tenta, e falha sem bloquear
+            raise RuntimeError("403")
+    assert atualizar.atualizar(CFG, tmp_path / "d", sess=SemRede(b""), zip_local=z) == 0
+    est = store.ler_estado(tmp_path / "d")
+    assert est["ultimo_periodo"] == "2025-03" and est["ultima_falha"] is None and est["fonte"]["arquivo"] == "liquidos.zip"
