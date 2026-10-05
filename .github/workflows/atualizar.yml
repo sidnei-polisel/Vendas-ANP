@@ -8,6 +8,8 @@ on:
         description: "Baixar e processar mesmo sem mudança na ANP"
         type: boolean
         default: false
+  release:
+    types: [published]   # plano B: anexe o liquidos.zip a um release (a ANP bloqueia o download automático)
   push:
     branches: [main]
     paths: ["pagina/**", ".github/workflows/atualizar.yml"]
@@ -26,16 +28,29 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
           cache: pip
       - run: pip install -r requirements-dev.txt
       - run: python -m pytest -q
+      - name: Baixar o zip anexado ao release
+        if: github.event_name == 'release'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release download "${{ github.event.release.tag_name }}" --pattern "*.zip" --dir entrada
       - name: Atualizar
         id: atualizar
         continue-on-error: true
-        run: python -m ingest.atualizar ${{ inputs.forcar && '--forcar' || '' }}
+        run: |
+          ZIP=$(ls entrada/*.zip 2>/dev/null | head -n1 || true)
+          if [ -n "$ZIP" ]; then
+            python -m ingest.atualizar --zip "$ZIP"
+          else
+            python -m ingest.atualizar ${{ inputs.forcar && '--forcar' || '' }}
+          fi
       - name: Commit (só se algo mudou)
         run: |
           git config user.name "github-actions[bot]"
