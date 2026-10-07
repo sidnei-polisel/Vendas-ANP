@@ -1,7 +1,7 @@
 name: Atualizar dados ANP e publicar página
 on:
   schedule:
-    - cron: "20 19 6 * *"   # dia 6 às 16:20 em Brasília (19:20 UTC)
+    - cron: "24 19 7 * *"   # dia 7 às 16:24 em Brasília (19:24 UTC)
   workflow_dispatch:
     inputs:
       forcar:
