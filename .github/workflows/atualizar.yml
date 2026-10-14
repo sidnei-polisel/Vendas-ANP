@@ -75,7 +75,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
-      contents: read
+      contents: write   # commita docs/index.html (a Vercel publica essa pasta)
       pages: write
       id-token: write
     environment:
@@ -92,6 +92,18 @@ jobs:
       - run: pip install -r requirements.txt
       - name: Gerar página
         run: python -m pagina.build --saida docs
+      - name: Commit da página (para a Vercel; só se mudou)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs
+          if git diff --cached --quiet; then
+            echo "Página igual; nada a commitar"
+          else
+            git commit -m "página: docs/index.html $(date -u +%Y-%m-%d)"
+            git pull --rebase
+            git push
+          fi
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

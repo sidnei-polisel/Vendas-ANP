@@ -25,6 +25,13 @@ Resultado: uma página HTML interativa (GitHub Pages) que se atualiza sozinha.
 4. Actions → "Atualizar dados ANP e publicar página" → Run workflow (marque "forcar" na primeira vez).
 5. O link da página aparece no job "publicar" e em Settings → Pages.
 
+## Publicar na Vercel (opcional, além do GitHub Pages)
+
+O workflow commita `docs/index.html` a cada publicação; o `vercel.json` diz à Vercel para servir a pasta `docs` sem build.
+1. vercel.com/new → Import do repositório `Vendas-ANP` (conta GitHub).
+2. Deixe tudo como vier (o `vercel.json` já define: sem instalação, sem build, saída `docs`) → Deploy.
+3. Cada push na `main` (inclusive o do bot após a atualização da ANP) republica sozinho.
+
 ## Local (opcional)
 
 ```bash
