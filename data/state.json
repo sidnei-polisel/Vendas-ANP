@@ -1,16 +1,16 @@
 {
  "fonte": {
-  "arquivo": "liquidos.1.zip",
-  "sha256": "b50640660a661c39e3ee3b471b5c6437829e291ce9f2fad602dfcfccbfee8b0d",
-  "bytes": 21745562,
+  "arquivo": "liquidos.zip",
+  "sha256": "e7254999d515558adb912138b9224a70529f454625116cbe47d126fda9bc4f47",
+  "bytes": 21339214,
   "etag": null,
   "last_modified": null
  },
- "atualizado_em": "2026-10-05T11:13:56-03:00",
- "ultimo_periodo": "2026-08",
- "linhas_fonte": 1045418,
+ "atualizado_em": "2026-11-06T14:18:20-03:00",
+ "ultimo_periodo": "2026-09",
+ "linhas_fonte": 965332,
  "linhas_invalidas": 0,
- "estornos": 453,
+ "estornos": 407,
  "meses": {
   "2017-01": {
    "hash": "9a46870d52ccb88cacaba4607ba1699dddb9923f7a6be152e3a004be77e83167",
@@ -679,7 +679,7 @@
    "agentes": 147
   },
   "2026-04": {
-   "hash": "68f514073e4a8c78bed645e2dfe67e97ea058b39842867f4afcedc8d0be30db3",
+   "hash": "d63c08c5df34a2e8535b989293758351351da86fa063e734398e713edf1f1022",
    "linhas": 11816,
    "volume_m3": 11508581.491,
    "agentes": 143
@@ -691,31 +691,55 @@
    "agentes": 148
   },
   "2026-06": {
-   "hash": "2bebc8770bd3b8b211ac935e0ecf23fc7965c30a440debf19380d730768ab38d",
-   "linhas": 11749,
+   "hash": "baf54638f72596c87fb9b618933cff1c5190dcb4fa10d4e0b06dfaebcec09586",
+   "linhas": 11747,
    "volume_m3": 11515361.87,
    "agentes": 149
   },
   "2026-07": {
-   "hash": "1088ed4c56b0432bbb343f244be50fdc48284b2f82060ae8f5284e0f7064517e",
-   "linhas": 12234,
+   "hash": "4ff9adfc3bf93ec4bc6f387ae5a33951b415b5f8ff3645c90b7ced2253e3dbca",
+   "linhas": 12233,
    "volume_m3": 12364578.754,
    "agentes": 145
   },
   "2026-08": {
-   "hash": "d0efcc921394f0c532868aaa27f14774e761dd9fa7c1359519f69b812261fb8d",
-   "linhas": 12356,
-   "volume_m3": 12184531.491,
+   "hash": "f64c079de1d785ce0e1219d57311e72e336b9d193cc2353c43ba0da01212c37d",
+   "linhas": 12351,
+   "volume_m3": 12184486.491,
    "agentes": 144
+  },
+  "2026-09": {
+   "hash": "4a37f9a59e06a9365ce9bb042a7469b678fd929b6cdbca504705b296f0ed3543",
+   "linhas": 12353,
+   "volume_m3": 12076150.299,
+   "agentes": 143
   }
  },
  "parciais": [],
- "ultima_falha": {
-  "em": "2026-11-06T14:09:44-03:00",
-  "motivo": "403 Client Error: Forbidden for url: https://www.gov.br/anp/pt-br/centrais-de-conteudo/dados-abertos/arquivos/mdpg/liquidos.zip"
+ "ultima_falha": null,
+ "congelados": {
+  "meses": [
+   "2017-01",
+   "2017-02",
+   "2017-03",
+   "2017-04",
+   "2017-05",
+   "2017-06",
+   "2017-07",
+   "2017-08",
+   "2017-09",
+   "2017-10",
+   "2017-11",
+   "2017-12"
+  ],
+  "origem": {
+   "arquivo": "liquidos.1.zip",
+   "sha256": "b50640660a661c39e3ee3b471b5c6437829e291ce9f2fad602dfcfccbfee8b0d"
+  },
+  "motivo": "mês saiu do liquidos.zip da ANP; mantido do arquivo oficial anterior"
  },
  "conferencia": {
-  "divergencias": 226,
-  "ate": "2026-08"
+  "divergencias": 227,
+  "ate": "2026-09"
  }
 }
