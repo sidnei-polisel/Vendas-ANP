@@ -711,7 +711,7 @@
  },
  "parciais": [],
  "ultima_falha": {
-  "em": "2026-11-05T05:44:30-03:00",
+  "em": "2026-11-06T14:09:44-03:00",
   "motivo": "403 Client Error: Forbidden for url: https://www.gov.br/anp/pt-br/centrais-de-conteudo/dados-abertos/arquivos/mdpg/liquidos.zip"
  },
  "conferencia": {
