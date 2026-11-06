@@ -45,6 +45,9 @@ class Resp:
     def __exit__(self, *a):
         pass
 
+    def close(self):
+        pass
+
 
 class Sessao:
     def __init__(self, conteudo, etag='"v1"', conf=b""):
@@ -113,6 +116,23 @@ def test_download_incompleto(tmp_path):
             return Resp({"ETag": '"v1"', "Content-Length": "999999"})
     assert atualizar.atualizar(CFG, tmp_path / "d", sess=Curto(_zip_bytes()), pasta=tmp_path) == 1
     assert "incompleto" in store.ler_estado(tmp_path / "d")["ultima_falha"]["motivo"]
+
+
+def test_head_bloqueado_usa_get(tmp_path):
+    """gov.br responde 403 ao HEAD vindo do runner do GitHub; a coleta segue via GET."""
+    class HeadBloqueado(Sessao):
+        def head(self, url, **kw):
+            return Resp(status=403)
+
+        def get(self, url, **kw):
+            r = super().get(url, **kw)
+            if not url.endswith("conf.csv"):
+                r.headers = {"Content-Length": str(len(self.conteudo))}
+            return r
+    s = HeadBloqueado(_zip_bytes())
+    assert atualizar.atualizar(CFG, tmp_path / "d", sess=s, pasta=tmp_path) == 0
+    est = store.ler_estado(tmp_path / "d")
+    assert est["ultimo_periodo"] == "2025-03" and est["ultima_falha"] is None
 
 
 def test_conferencia_ler_e_comparar():
