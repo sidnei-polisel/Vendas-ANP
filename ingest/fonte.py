@@ -1,4 +1,4 @@
-"""Verifica (HEAD) e baixa o liquidos.zip da ANP. Só usa a rede aqui; o resto do pacote é puro."""
+"""Verifica (HEAD, ou GET se o HEAD for bloqueado) e baixa o liquidos.zip da ANP. Só usa a rede aqui; o resto do pacote é puro."""
 import hashlib
 import logging
 import os
@@ -31,10 +31,26 @@ def mudou(remoto, fonte):
     return False
 
 
+def sondar(sessao_, url):
+    """Cabeçalhos do arquivo remoto sem baixar o corpo.
+
+    O gov.br passou a responder 403 a qualquer HEAD vindo do runner do GitHub (até a home da ANP),
+    enquanto GET funciona normalmente (testado em 06/11/2026). Então: tenta HEAD e, se vier 403/405,
+    abre um GET em streaming e fecha sem ler o corpo.
+    """
+    r = sessao_.head(url, allow_redirects=True, timeout=30)
+    if r.status_code not in (403, 405):
+        return r
+    log.info("HEAD %s -> %s; consultando cabeçalhos via GET", url, r.status_code)
+    r = sessao_.get(url, stream=True, allow_redirects=True, timeout=30)
+    r.close()
+    return r
+
+
 def achar_url(cfg, sessao):
     """URL do zip; se falhar, procura o link liquidos.zip na página-mãe oficial."""
     url = cfg["fontes"]["liquidos_zip"]
-    r = sessao.head(url, allow_redirects=True, timeout=30)
+    r = sondar(sessao, url)
     if r.ok:
         return url, r
     log.warning("HEAD %s -> %s; procurando na página-mãe", url, r.status_code)
@@ -44,7 +60,7 @@ def achar_url(cfg, sessao):
     if not m:
         raise RuntimeError("liquidos.zip não encontrado na página-mãe da ANP")
     url = urljoin(cfg["fontes"]["pagina_mae"], m.group(1))
-    r = sessao.head(url, allow_redirects=True, timeout=30)
+    r = sondar(sessao, url)
     r.raise_for_status()
     return url, r
 

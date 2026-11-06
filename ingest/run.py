@@ -7,6 +7,7 @@ from datetime import datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
+import pandas as pd
 import yaml
 
 from . import carga, store
@@ -22,9 +23,31 @@ def _sha256(caminho):
     return h.hexdigest()
 
 
+def _manter_meses_antigos(data, estado, base):
+    """Meses já gravados e anteriores ao 1º mês do zip ficam congelados na base.
+
+    Em out/2026 a ANP tirou 2017 do liquidos.zip (o histórico 2007_a_2017 termina em 2016-12 e o novo
+    2018_a_2023 começa em 2018-01). Os números de 2017 vieram do zip oficial anterior; são mantidos como
+    estavam e listados em state.json["congelados"] com a origem. Buracos no meio da série não são
+    preenchidos: continuam barrados por checar_regressao.
+    """
+    antes = estado.get("congelados") or {}
+    meses = sorted(ym for ym in estado["meses"] if ym < base.ano_mes.min())
+    if not meses:
+        return base, None
+    antigos = store.ler_meses(data, meses)[base.columns]
+    log.warning("mantendo %d meses que não vêm mais no zip da ANP (%s a %s)", len(meses), meses[0], meses[-1])
+    origem = antes.get("origem") or {k: estado["fonte"].get(k) for k in ("arquivo", "sha256")}
+    congelados = {"meses": meses, "origem": origem,
+                  "motivo": antes.get("motivo") or "mês saiu do liquidos.zip da ANP; mantido do arquivo oficial anterior"}
+    base = pd.concat([antigos, base], ignore_index=True).sort_values(carga.BASE, ignore_index=True)
+    return base, congelados
+
+
 def executar(zip_path, cfg, data, completo, estado, remoto=None):
     q = cfg["qualidade"]
     base, st = carga.ler_zip(zip_path, cfg)
+    base, congelados = _manter_meses_antigos(data, estado, base)
     agregado = carga.agregar(base)
     resumo = carga.resumo_mensal(base, agregado)
     parciais = carga.marcar_parciais(resumo, q["limiar_parcial"], q["max_parciais_seguidos"])
@@ -50,6 +73,8 @@ def executar(zip_path, cfg, data, completo, estado, remoto=None):
         "parciais": parciais,
         "ultima_falha": None,
     }
+    if congelados:
+        novo["congelados"] = congelados
     store.gravar_estado(data, novo)
     log.info("ok: %d meses (%s a %s), %d regravados, parciais=%s, estornos=%d, inválidas=%d",
              len(resumo), resumo.index[0], resumo.index[-1], len(mudados), parciais or "nenhum",

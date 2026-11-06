@@ -45,6 +45,9 @@ class Resp:
     def __exit__(self, *a):
         pass
 
+    def close(self):
+        pass
+
 
 class Sessao:
     def __init__(self, conteudo, etag='"v1"', conf=b""):
@@ -115,6 +118,23 @@ def test_download_incompleto(tmp_path):
     assert "incompleto" in store.ler_estado(tmp_path / "d")["ultima_falha"]["motivo"]
 
 
+def test_head_bloqueado_usa_get(tmp_path):
+    """gov.br responde 403 ao HEAD vindo do runner do GitHub; a coleta segue via GET."""
+    class HeadBloqueado(Sessao):
+        def head(self, url, **kw):
+            return Resp(status=403)
+
+        def get(self, url, **kw):
+            r = super().get(url, **kw)
+            if not url.endswith("conf.csv"):
+                r.headers = {"Content-Length": str(len(self.conteudo))}
+            return r
+    s = HeadBloqueado(_zip_bytes())
+    assert atualizar.atualizar(CFG, tmp_path / "d", sess=s, pasta=tmp_path) == 0
+    est = store.ler_estado(tmp_path / "d")
+    assert est["ultimo_periodo"] == "2025-03" and est["ultima_falha"] is None
+
+
 def test_conferencia_ler_e_comparar():
     csv = ("ANO;MÊS;GRANDE REGIÃO;UNIDADE DA FEDERAÇÃO;PRODUTO;VENDAS\n"
            "2025;JAN;SUDESTE;SÃO PAULO;ÓLEO DIESEL (m3);10000,0\n"
@@ -146,3 +166,34 @@ def test_zip_local_nao_usa_a_rede(tmp_path):
     assert atualizar.atualizar(CFG, tmp_path / "d", sess=SemRede(b""), zip_local=z) == 0
     est = store.ler_estado(tmp_path / "d")
     assert est["ultimo_periodo"] == "2025-03" and est["ultima_falha"] is None and est["fonte"]["arquivo"] == "liquidos.zip"
+
+
+def test_zip_reorganizado_le_recentes_utf8_e_congela_meses_antigos(tmp_path):
+    """Formato de out/2026: Atual só com os meses novos, 2018-2023 em outro arquivo (UTF-8 com BOM) e 2017 fora do zip."""
+    d = tmp_path / "d"
+    cfg = {**CFG, "arquivos_csv": {**CFG["arquivos_csv"], "recentes": ["Rec.csv"]}}
+
+    def linhas(ano, meses, q="10,0"):
+        return "".join(f"{ano};{m};AG1;1;Diesel B;d;SE;SP;SE;SP;Posto Revendedor;{q}\n" for m in meses)
+
+    # carga antiga: tudo no Atual (2017 + 2018)
+    b = io.BytesIO()
+    with zipfile.ZipFile(b, "w") as z:
+        z.writestr("Liquidos_Vendas_Atual.csv", (CAB + linhas(2017, range(1, 13)) + linhas(2018, range(1, 13))).encode("cp1252"))
+        z.writestr("Rec.csv", ("﻿" + CAB).encode("utf-8"))
+    assert atualizar.atualizar(cfg, d, sess=Sessao(b.getvalue()), pasta=tmp_path) == 0
+    antigo = store.ler_estado(d)
+    assert len(antigo["meses"]) == 24
+
+    # zip novo: 2017 sumiu, 2018 no Rec.csv (UTF-8 com BOM e CRLF), Atual com 2019-01
+    b = io.BytesIO()
+    with zipfile.ZipFile(b, "w") as z:
+        z.writestr("Liquidos_Vendas_Atual.csv", (CAB + linhas(2019, [1])).encode("cp1252"))
+        z.writestr("Rec.csv", ("﻿" + CAB + linhas(2018, range(1, 13))).replace("\n", "\r\n").encode("utf-8"))
+    assert atualizar.atualizar(cfg, d, sess=Sessao(b.getvalue(), etag='"v2"'), pasta=tmp_path) == 0
+    est = store.ler_estado(d)
+    assert est["ultima_falha"] is None and len(est["meses"]) == 25 and est["ultimo_periodo"] == "2019-01"
+    assert est["congelados"]["meses"] == [f"2017-{m:02d}" for m in range(1, 13)]
+    assert est["congelados"]["origem"]["sha256"] == antigo["fonte"]["sha256"]
+    assert all(est["meses"][ym]["hash"] == antigo["meses"][ym]["hash"] for ym in est["congelados"]["meses"])
+    assert est["meses"]["2018-06"]["volume_m3"] == antigo["meses"]["2018-06"]["volume_m3"]

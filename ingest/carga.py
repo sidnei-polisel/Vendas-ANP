@@ -32,9 +32,12 @@ def _normalizar(chunk, fator):
 
 
 def _ler_csv(zf, nome, cfg):
-    enc, sep = cfg["encoding"], cfg["separador"]
+    sep = cfg["separador"]
     with zf.open(nome) as f:
-        primeira = f.readline().decode(enc)
+        primeira = f.readline()
+    # A ANP mistura encodings no mesmo zip: o Historico_2018_a_2023 vem em UTF-8 com BOM, os demais em cp1252.
+    enc = "utf-8-sig" if primeira.startswith(b"\xef\xbb\xbf") else cfg["encoding"]
+    primeira = primeira.decode(enc)
     kw = dict(sep=sep, encoding=enc, dtype=str, keep_default_na=False, chunksize=CHUNK)
     if tem_cabecalho(primeira, sep):
         renome, fator = mapear([c.strip('"') for c in primeira.strip().split(sep)])
@@ -62,10 +65,18 @@ def ler_zip(caminho, cfg):
     with zipfile.ZipFile(caminho) as zf:
         atual, tot = _ler_arquivo(zf, cfg["arquivos_csv"]["atual"], cfg)
         partes = [atual]
+        # Desde out/2026 a ANP separa 2018-2023 do "Atual" (que passou a cobrir só 2024+).
+        # Atual prevalece onde os períodos se sobrepõem.
+        for nome in cfg["arquivos_csv"].get("recentes", []):
+            rec, t2 = _ler_arquivo(zf, nome, cfg)
+            partes.append(rec[rec.ano_mes < atual.ano_mes.min()])
+            for k in tot:
+                tot[k] += t2[k]
+            atual = pd.concat([atual, partes[-1]])
         if cfg["incluir_historico"]:
             hist, t2 = _ler_arquivo(zf, cfg["arquivos_csv"]["historico"], cfg)
             # Atual prevalece onde os períodos se sobrepõem.
-            partes.append(hist[hist.ano_mes < atual.ano_mes.min()])
+            partes.append(hist[hist.ano_mes < atual.ano_mes.min()])  # atual aqui já inclui os "recentes"
             for k in tot:
                 tot[k] += t2[k]
     if tot["invalidas"] / tot["linhas"] > cfg["qualidade"]["max_linhas_invalidas"]:
