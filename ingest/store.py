@@ -36,6 +36,12 @@ def gravar_estado(data, estado):
              Path(data) / "state.json")
 
 
+def ler_meses(data, meses):
+    """Lê partições já gravadas da base (usado para manter meses que saíram do zip da ANP)."""
+    partes = [_ler(Path(data) / "base" / f"ano_mes={ym}" / "part.parquet") for ym in meses]
+    return pd.concat(partes, ignore_index=True) if partes else None
+
+
 def gravar(data, base, agregado, mudados, completo):
     """Regrava só as partições mudadas e os trechos afetados do agregado. O state.json fica por último."""
     data = Path(data)

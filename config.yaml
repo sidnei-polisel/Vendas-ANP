@@ -8,7 +8,9 @@ fontes:
 glp: false  # unidade do GLP não confirmada; não somar a líquidos sem conversão documentada
 
 arquivos_csv:
-  atual: Liquidos_Vendas_Atual.csv
+  atual: Liquidos_Vendas_Atual.csv          # desde out/2026 cobre só 2024+
+  recentes:                                 # lidos sempre; Atual prevalece na sobreposição
+    - Liquidos_Vendas_Historico_2018_a_2023.csv
   historico: Liquidos_Vendas_Historico_2007_a_2017.csv
 
 # Histórico 2007-2016 tem cobertura incompleta frente à base de vendas da ANP
